@@ -1,0 +1,72 @@
+
+*{
+   font-family: monospace;
+}
+
+/* Remove margens padrão e trava o scroll */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Adeus, barra de rolagem! */
+    background-color: #000000;
+}
+
+/* O Main ocupa toda a tela, exceto o espaço do footer */
+main {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 40px); /* 100% da tela menos a altura do seu footer */
+}
+
+#game {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Faz o jogo ocupar todo o espaço do main */
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.header {
+    text-align: center;
+    padding: 3px;
+    background: #333;
+}
+
+.hud {
+    padding: 2px;
+    background: #444;
+    text-align: left;
+    font-size: 1.2rem;
+}
+
+.play_area {
+    flex: 1; /* Ocupa todo o resto da tela */
+    position: relative; /* Importante para localizar objetos dentro dela */
+    background: #222;
+    cursor: crosshair;
+}
+
+#object_top {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: gold;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Localização exata */
+    top: 50%;  /* 50% do topo da área de jogo */
+    left: 50%; /* 50% da lateral esquerda */
+}
+
+footer {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    color: #666;
+    font-size: 0.8rem;
+}
