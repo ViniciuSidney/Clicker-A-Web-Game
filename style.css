@@ -31,6 +31,7 @@ main {
 .header {
     text-align: center;
     background: #333;
+    z-index: 10; /* Garante que o header fique acima de outros elementos */
 }
 
 #game_title {
@@ -54,6 +55,7 @@ main {
     background: #444;
     text-align: left;
     font-size: 1.2rem;
+    z-index: 10; /* Garante que o HUD fique acima de outros elementos */
 }
 
 .counters {
@@ -76,24 +78,51 @@ main {
     background-color: #395368; /* Azul para cliques */
 }
 
-.play_area {
-    flex: 1; /* Ocupa todo o resto da tela */
+#play_field {
+    border: #21a533 solid 2px;
+    flex: 1; 
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente o wrapper */
-    align-items: center;     /* Centraliza verticalmente o wrapper */
-    height: 100%;
+    justify-content: center; 
+    align-items: center;    
     overflow: hidden;   
     background: #222;
     cursor: crosshair;
+    position: relative; 
+}
+
+.coin {
+    position: absolute; /* Para brotar em qualquer lugar */
+    width: 30px;
+    height: 30px;
+    background-color: #ffd700;
+    border: 3px solid #b8860b;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #b8860b;
+    user-select: none;
+    animation: spawnCoin 0.3s ease-out;
+    z-index: 5;
+}
+
+@keyframes spawnCoin {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 .target_wrapper {
+    border: #a52121 solid 2px;
+    padding: 30px 0px;
     display: flex;
     flex-direction: column; /* Empilha: Nome > Círculo > Vida */
     align-items: center;     /* Centraliza tudo horizontalmente neste grupo */
     gap: 15px;               /* Cria um espaço fixo e limpo entre os itens */
     justify-content: center;
-    width: 100%;            /* Ocupa a largura da play_area */
+    width: 20%;            /* Ocupa a largura da play_area */
+    z-index: 10; /* Garante que o alvo fique abaixo do HUD e do header */
 }
 
 #object {
