@@ -72,19 +72,20 @@ function spawnMoeda() {
   const proibidoBase = targetRect.bottom - fieldRect.top + margemSeguranca;
 
   do {
-    // 1. Sorteia X e Y livremente por toda a área verde (do 0 até o limite do tamanho dela)
+    // Sorteia X e Y livremente pela área verde
     x = Math.random() * (playField.clientWidth - moedaTamanho);
     y = Math.random() * (playField.clientHeight - moedaTamanho);
 
-    // 2. Verifica se a coordenada sorteada caiu DENTRO do quadrado vermelho
-    const caiuNoX = x > proibidoEsquerda && x < proibidoDireita;
-    const caiuNoY = y > proibidoTopo && y < proibidoBase;
+    // NOVA MATEMÁTICA DE COLISÃO:
+    // Verifica se a 'caixa' da moeda cruza com a 'caixa' da área proibida
+    const caiuNoX = x + moedaTamanho > proibidoEsquerda && x < proibidoDireita;
+    const caiuNoY = y + moedaTamanho > proibidoTopo && y < proibidoBase;
 
     estaDentroDaAreaProibida = caiuNoX && caiuNoY;
 
     tentativa++;
 
-    // Se achou um lugar fora do retângulo vermelho, interrompe o loop
+    // Se não bateu no X e no Y ao mesmo tempo, está livre!
     if (!estaDentroDaAreaProibida) break;
   } while (tentativa < 50);
 
