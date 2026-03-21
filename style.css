@@ -35,10 +35,32 @@ main {
 }
 
 .hud {
+    display: flex;
+    justify-content: space-around; /* Centraliza o grupo todo no meio da tela */
+    gap: 30px;              /* Cria um espaçamento entre cada contador */
+
     padding: 2px;
     background: #444;
     text-align: left;
     font-size: 1.2rem;
+}
+
+.counters {
+    padding: 1% 2%;
+    background-color: #555;
+    color: #eee;
+}
+
+#money_c {
+    background-color: #65693c; /* Verde para dinheiro */
+}
+
+#damage_c {
+    background-color: #704643; /* Vermelho para dano */
+}
+
+#click_c {
+    background-color: #395368; /* Azul para cliques */
 }
 
 .play_area {
