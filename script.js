@@ -20,14 +20,16 @@ const displayVidaObjeto = document.querySelectorAll('.object_counters')[0];
 
 // 3. Função inicial que atualiza a interface visual
 function atualizarInterface() {
-  const porcentagem = (vidaAtual / vidaMaxima) * 100;
+  const porcentagem = (Math.max(0, vidaAtual) / vidaMaxima) * 100;
   barraPreenchimento.style.width = porcentagem + '%';
-  
-  displayVidaObjeto.innerText = vidaAtual.toFixed(0) + ' / ' + vidaMaxima;
+   nomeObjeto.innerText = `Círculo Dourado (Nív. ${nivel})`;
 
-  displayMoedas.innerText = 'Moedas: 0';
-  displayDano.innerText = 'Dano por Clique: ' + danoPorClique.toFixed(1);
-  displayCliques.innerText = 'Cliques: ' + cliquesTotais;
+  displayVidaObjeto.innerText =
+    formatarNumero(Math.max(0, vidaAtual)) + ' / ' + formatarNumero(vidaMaxima);
+
+   displayMoedas.innerText = 'Moedas: 0';
+   displayDano.innerText = 'Dano por Clique: ' + formatarNumero(danoPorClique);
+   displayCliques.innerText = 'Cliques: ' + formatarNumero(cliquesTotais);
 }
 
 atualizarInterface();
@@ -78,6 +80,8 @@ function clicarObjeto() {
 }
 
 objeto.addEventListener('click', () => {
-   setTimeout(() => {clicarObjeto();}, 150); 
-   // Pequeno delay para garantir que o clique seja registrado antes de atualizar a interface
+  setTimeout(() => {
+    clicarObjeto();
+  }, 150);
+  // Pequeno delay para garantir que o clique seja registrado antes de atualizar a interface
 });
