@@ -30,8 +30,19 @@ main {
 
 .header {
     text-align: center;
-    padding: 3px;
     background: #333;
+}
+
+#game_title {
+    margin: 0;
+    padding: 10px 0 5px 0;
+    font-size: 2rem;
+}
+
+#game_version {
+    margin: 0;
+    padding: 5px 0 10px 0;
+    font-size: 1.2rem;
 }
 
 .hud {
@@ -46,9 +57,11 @@ main {
 }
 
 .counters {
-    padding: 1% 2%;
+    margin: 8px;
+    padding: 0.5% 2%;
     background-color: #555;
     color: #eee;
+    font-size: smaller;
 }
 
 #money_c {
@@ -65,22 +78,63 @@ main {
 
 .play_area {
     flex: 1; /* Ocupa todo o resto da tela */
-    position: relative; /* Importante para localizar objetos dentro dela */
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente o wrapper */
+    align-items: center;     /* Centraliza verticalmente o wrapper */
+    height: 100%;
+    overflow: hidden;   
     background: #222;
     cursor: crosshair;
 }
 
-#object_top {
-    position: absolute;
-    width: 50px;
-    height: 50px;
+.target_wrapper {
+    display: flex;
+    flex-direction: column; /* Empilha: Nome > Círculo > Vida */
+    align-items: center;     /* Centraliza tudo horizontalmente neste grupo */
+    gap: 15px;               /* Cria um espaço fixo e limpo entre os itens */
+    justify-content: center;
+    width: 100%;            /* Ocupa a largura da play_area */
+}
+
+#object {
+    width: 100px;
+    height: 100px;
     background-color: gold;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    margin: 0 auto; 
+    display: block;
+    position: relative;
+}
 
-    /* Localização exata */
-    top: 50%;  /* 50% do topo da área de jogo */
-    left: 50%; /* 50% da lateral esquerda */
+/* Estilo do Nome */
+.object_name {
+    margin: 0 auto;
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* Estilo do Container da Barra (A borda/fundo da barra) */
+.health_bar_container {
+    width: 150px;       /* Um pouco mais larga que o círculo */
+    height: 12px;
+    background-color: #522828; /* Cor de fundo "vazia" */
+    /* border: 2px solid #3d1c1c; */
+    border-radius: 7px;
+    overflow: hidden;   /* Garante que o preenchimento não vaze */
+}
+
+/* Estilo do Preenchimento (A parte colorida da vida) */
+.health_bar_fill {
+    height: 100%;
+    background-color: #ac4e4e; /* Cor vermelha de vida */
+    transition: width 0.2s ease; /* Animação suave quando a vida muda */
+}
+
+.health_text {
+    margin: 0;
+    color: white;
+    font-size: 0.9rem;
 }
 
 footer {
