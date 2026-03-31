@@ -36,26 +36,33 @@ main {
 
 #game_title {
     margin: 0;
-    padding: 10px 0 5px 0;
-    font-size: 2rem;
+    padding: 10px 0 3px 0;
+    font-size: 1.5rem;
 }
 
 #game_version {
     margin: 0;
-    padding: 5px 0 10px 0;
-    font-size: 1.2rem;
+    padding: 0 0 10px 0;
+    font-size: 1rem;
 }
 
+/* Ajuste do HUD para ser uma coluna */
 .hud {
     display: flex;
-    justify-content: space-around; /* Centraliza o grupo todo no meio da tela */
-    gap: 30px;              /* Cria um espaçamento entre cada contador */
+    flex-direction: column; /* Empilha linha de cima e linha de baixo */
+    align-items: center;    /* Centraliza tudo horizontalmente */
+    padding: 10px 0;        /* Dá um respiro interno */
+    background: #333;
+    gap: 10px;              /* Espaço entre os contadores e a barra */
+    font-size: 1rem;
+    z-index: 10;
+}
 
-    padding: 2px;
-    background: #444;
-    text-align: left;
-    font-size: 1.2rem;
-    z-index: 10; /* Garante que o HUD fique acima de outros elementos */
+.hud-top {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
 }
 
 .counters {
@@ -76,6 +83,37 @@ main {
 
 #click_c {
     background-color: #395368; /* Azul para cliques */
+}
+
+/* --- NOVA BARRA DE XP NO HUD --- */
+.player_xp_container {
+    width: 250px;
+    height: 20px;
+    background-color: #24312c;
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player_xp_fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background:  #5bb992;
+    width: 0%; /* Começa em 0 */
+    transition: width 0.3s ease;
+}
+
+.player_xp_text {
+    position: relative; /* Fica acima do preenchimento */
+    font-size: 0.75rem;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgb(0, 42, 21);
 }
 
 #play_field {
