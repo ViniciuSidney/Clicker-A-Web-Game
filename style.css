@@ -51,7 +51,7 @@ main {
     display: flex;
     flex-direction: column; /* Empilha linha de cima e linha de baixo */
     align-items: center;    /* Centraliza tudo horizontalmente */
-    padding: 10px 0;        /* Dá um respiro interno */
+    padding: 0 0 10px 0;        /* Dá um respiro interno */
     background: #333;
     gap: 10px;              /* Espaço entre os contadores e a barra */
     font-size: 1rem;
@@ -88,7 +88,7 @@ main {
 /* --- NOVA BARRA DE XP NO HUD --- */
 .player_xp_container {
     width: 250px;
-    height: 20px;
+    height: 15px;
     background-color: #24312c;
     border-radius: 7px;
     position: relative;
@@ -147,10 +147,31 @@ main {
 
 @keyframes coinLifeCycle {
     0% { transform: scale(0); opacity: 0; }
-    3% { transform: scale(1.15); opacity: 1; } /* Efeito de "pop" ao nascer */
+    2% { transform: scale(1.07); opacity: 1; } /* Efeito de "pop" ao nascer */
     8% { transform: scale(1); opacity: 1; }
     80% { transform: scale(1); opacity: 1; filter: brightness(1); }
     100% { transform: scale(0.2); opacity: 0; filter: brightness(2); } /* Fica pequena e brilha antes de sumir */
+}
+
+#stage_multiplier {
+    position: absolute;
+    top: 15px; /* Fica logo abaixo do limite superior da play_area */
+    left: 50%;
+    transform: translateX(-50%); /* Centraliza perfeitamente */
+    /* background-color: rgba(0, 0, 0, 0.4);  Fundo semi-transparente */
+    padding: 5px 15px;
+    border-radius: 20px;
+    /* border: 1px solid #444; */
+    color: #ffd700; /* Cor dourada para remeter a moedas */
+    font-size: 0.9rem;
+    font-weight: bold;
+    z-index: 5; /* Atrás do HUD, mas na frente do fundo */
+    pointer-events: none; /* Garante que o clique passe através dele e atinja as moedas/alvo */
+    letter-spacing: 1px;
+}
+
+#mult_value {
+    color: #fff;
 }
 
 .target_wrapper {
@@ -183,7 +204,7 @@ main {
 }
 
 .shape-triangle {
-    border-radius: 0;
+    border-radius: 0%;
     /* O clip-path corta o quadrado original no formato de um triângulo! */
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
 }
@@ -192,7 +213,7 @@ main {
 .object_name {
     margin: 0 auto;
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-align: center;
 }
 
