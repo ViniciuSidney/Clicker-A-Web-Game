@@ -9,16 +9,16 @@ const player = {
 
 // --- NOVA LISTA DE ALVOS ---
 const targetList = [
-    { name: 'Círculo Dourado',   color: 'gold',           shape: 'shape-circle',   baseHealth: 50,  rewardMultiplier: 1 },
-    { name: 'Quadrado Carmesim', color: 'crimson',        shape: 'shape-square',   baseHealth: 100, rewardMultiplier: 1.5 },
-    { name: 'Triângulo Esmeralda', color: 'mediumseagreen', shape: 'shape-triangle', baseHealth: 200, rewardMultiplier: 2.5 }
+    { name: 'Círculo Dourado',   color: 'gold',           shape: 'shape-circle',   baseHealth: 10,  rewardMultiplier: 1 },
+    { name: 'Quadrado Carmesim', color: 'crimson',        shape: 'shape-square',   baseHealth: 30, rewardMultiplier: 1.5 },
+    { name: 'Triângulo Esmeralda', color: 'mediumseagreen', shape: 'shape-triangle', baseHealth: 80, rewardMultiplier: 2.5 }
 ];
 
 const target = {
     currentIndex: 0, // Qual alvo da lista estamos enfrentando agora (0, 1 ou 2)
     round: 1,        // Quantas vezes já completamos a lista inteira
-    maxHealth: 50,
-    currentHealth: 50,
+    maxHealth: 10,
+    currentHealth: 10,
     baseDamageFormula: (level) => 5 * (level * 0.75)
 };
 
@@ -45,6 +45,10 @@ const ui = {
     coinsDisplay: document.querySelectorAll('.counters')[0],
     damageDisplay: document.querySelectorAll('.counters')[1],
     clicksDisplay: document.querySelectorAll('.counters')[2],
+
+    xpBar: document.getElementById('xp_fill'),
+    xpText: document.querySelector('.player_xp_text'),
+
     healthText: document.querySelectorAll('.object_counters')[0]
 };
 
@@ -53,15 +57,19 @@ function updateUI() {
     const currentTargetData = targetList[target.currentIndex];
     const healthPercentage = (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
     
-    // Atualiza a barra e os textos
     ui.healthBar.style.width = `${healthPercentage}%`;
-    ui.nameDisplay.innerText = `${currentTargetData.name} (Nív. ${player.level})`;
+    
+    // ATUALIZAÇÃO: Agora mostra o Nível da Rodada, não o do Player
+    ui.nameDisplay.innerText = `${currentTargetData.name} (Nível ${target.round})`;
+    
     ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
     ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
     ui.damageDisplay.innerText = `Damage per Click: ${formatNumber(player.damagePerClick)}`;
     ui.clicksDisplay.innerText = `Clicks: ${formatNumber(player.totalClicks)}`;
 
-    // Atualiza a aparência do objeto (Forma e Cor)
+    ui.xpBar.style.width = `50%`;
+    ui.xpText.innerText = `Lv. ${player.level} (50%)`;
+
     ui.targetObject.className = `objects ${currentTargetData.shape}`;
     ui.targetObject.style.backgroundColor = currentTargetData.color;
 }
@@ -97,7 +105,13 @@ function spawnCoin() {
   }
 
   // Calcula o valor baseado no nível e multiplicador da raridade
-  const coinValue = Math.floor(player.level * selectedType.multiplier);
+  const currentTargetData = targetList[target.currentIndex];
+
+  const baseValue = 1;
+  const roundBonus = Math.pow(1.2, target.round - 1);
+  const coinValue = Math.floor(baseValue * selectedType.multiplier * currentTargetData.rewardMultiplier * roundBonus);
+
+  coin.dataset.value = coinValue;
 
   // Define a aparência e o texto
   coin.innerText = `+${formatNumber(coinValue)}`;
@@ -155,7 +169,7 @@ function handleTargetClick() {
         const currentTargetData = targetList[target.currentIndex];
 
         // 1. Spawna as moedas com um bônus extra baseado na dificuldade do alvo!
-        const bonusQuantity = Math.floor(coinConfig.spawnQuantity * currentTargetData.rewardMultiplier);
+        const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
         for (let i = 0; i < bonusQuantity; i++) {
             spawnCoin();
         }
@@ -175,15 +189,12 @@ function handleTargetClick() {
         // 3. Puxa os dados do NOVO alvo que vamos enfrentar
         const nextTargetData = targetList[target.currentIndex];
 
-        // 4. Progressão de Vida: (Vida Base do Alvo) * (1.5 elevado ao nível do jogador)
-        // Isso garante que a vida cresça de forma exponencial, mantendo o desafio!
-        target.maxHealth = Math.floor(nextTargetData.baseHealth * Math.pow(1.5, player.level - 1));
+        target.maxHealth = Math.floor(nextTargetData.baseHealth * Math.pow(2, target.round - 1));
         target.currentHealth = target.maxHealth;
         
         // Atualiza o dano do jogador
         player.damagePerClick = target.baseDamageFormula(player.level);
 
-        console.log(`Level Up! Novo Alvo: ${nextTargetData.name}, Vida: ${target.maxHealth}`);
     }
 
     updateUI();

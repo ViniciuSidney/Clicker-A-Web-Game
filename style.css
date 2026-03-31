@@ -146,10 +146,11 @@ main {
 }
 
 @keyframes coinLifeCycle {
-    0% { transform: scale(0); opacity: 0; }        /* Nasce */
-    5% { transform: scale(1); opacity: 1; }        /* Aparece rápido */
-    70% { transform: scale(1); opacity: 1; }       /* Fica visível por 7 segundos */
-    100% { transform: scale(0.5); opacity: 0; }    /* Some nos últimos 3 segundos */
+    0% { transform: scale(0); opacity: 0; }
+    3% { transform: scale(1.15); opacity: 1; } /* Efeito de "pop" ao nascer */
+    8% { transform: scale(1); opacity: 1; }
+    80% { transform: scale(1); opacity: 1; filter: brightness(1); }
+    100% { transform: scale(0.2); opacity: 0; filter: brightness(2); } /* Fica pequena e brilha antes de sumir */
 }
 
 .target_wrapper {
