@@ -7,20 +7,18 @@
 | Construir o básico funcional
 
 🟢 0.1.0 — Primeiro loop jogável
-- Objeto com HP
+- Alvo com HP
 - Clique causa dano
-- Objeto “quebra” (sem efeitos ainda)
+- Alvo “morre” (sem efeitos ainda)
 
-🟢 0.2.0 — Sistema de recompensa
-- Spawn de moedas ao quebrar
+🟢 0.2.0 — Sistema de recompensa + UI
+- Spawn de moedas ao derrotar
 - Contador de moedas
 - Coleta por clique
+- Raridade de moedas
 
-🟢 0.3.0 — Feedback visual
+- Cores das moedas
 - Barra de vida
-- Animação de clique
-- Texto de dano (-1)
 
-🟢 0.4.0 — Física simples
-- Moedas caem com gravidade
-- Quicam no chão
+🟢 0.2.4 — Ciclo de alvos
+- Progressão crescente de dificuldade e recompensas
