@@ -23,7 +23,7 @@ const target = {
 };
 
 const coinConfig = {
-    spawnQuantity: 5,
+    spawnQuantity: 2,
     size: 30,
     safetyMargin: 10,
     despawnTime: 10000,
