@@ -125,11 +125,25 @@ main {
 #object {
     width: 100px;
     height: 100px;
-    background-color: gold;
-    border-radius: 50%;
     margin: 0 auto; 
     display: block;
     position: relative;
+    transition: background-color 0.3s ease, border-radius 0.3s ease; /* Transição suave ao trocar de alvo */
+}
+
+/* Nossas Novas Formas Geométricas */
+.shape-circle {
+    border-radius: 50%;
+}
+
+.shape-square {
+    border-radius: 15%; /* Cantos levemente arredondados para ficar bonito */
+}
+
+.shape-triangle {
+    border-radius: 0;
+    /* O clip-path corta o quadrado original no formato de um triângulo! */
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
 }
 
 /* Estilo do Nome */
