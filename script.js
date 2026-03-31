@@ -9,6 +9,7 @@ let moedas = 0;
 let danoPorClique = vidaMaxima / 15;
 
 // Selecionando os elementos
+const titulo = document.getElementById('game_title');
 const objeto = document.getElementById('object');
 const barraPreenchimento = document.getElementById('health_fill');
 const nomeObjeto = document.querySelector('.object_name');
@@ -100,10 +101,10 @@ function spawnMoeda() {
     moeda.remove();
   });
 
-    // Opcional: A moeda some sozinha após 10 segundos se não coletar
-  //   setTimeout(() => {
-  //     if (moeda) moeda.remove();
-  //   }, 10000);
+  // Opcional: A moeda some sozinha após 10 segundos se não coletar
+  setTimeout(() => {
+    if (moeda) moeda.remove();
+  }, 10000);
 
   playField.appendChild(moeda);
 }
@@ -111,12 +112,13 @@ function spawnMoeda() {
 
 function clicarObjeto() {
   // 1. Aplicar Dano
+  
   vidaAtual -= danoPorClique;
   cliquesTotais++;
 
   // 2. Verificar se o objeto "morreu" (Level Up)
   if (Math.floor(vidaAtual) <= 0) {
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 20; i++) {
       spawnMoeda();
     }
 
@@ -130,6 +132,7 @@ function clicarObjeto() {
 
     // Atualizar o nome para mostrar o Nível
     nomeObjeto.innerText = `Círculo Dourado (Nív. ${nivel})`;
+
     console.log(
       `Level Up! Nova Vida: ${vidaMaxima}, Novo Dano: ${danoPorClique}`,
     );

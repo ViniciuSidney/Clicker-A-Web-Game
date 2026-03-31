@@ -79,13 +79,12 @@ main {
 }
 
 #play_field {
-    border: #21a533 solid 2px;
     flex: 1; 
     display: flex;
     justify-content: center; 
     align-items: center;    
     overflow: hidden;   
-    background: #222;
+    background: #222222;
     cursor: crosshair;
     position: relative; 
 }
@@ -114,7 +113,6 @@ main {
 }
 
 .target_wrapper {
-    border: #a52121 solid 2px;
     padding: 30px 0px;
     display: flex;
     flex-direction: column; /* Empilha: Nome > Círculo > Vida */
