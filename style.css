@@ -91,8 +91,8 @@ main {
 
 .coin {
     position: absolute; /* Para brotar em qualquer lugar */
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     background-color: #ffd700;
     border: 3px solid #b8860b;
     border-radius: 50%;

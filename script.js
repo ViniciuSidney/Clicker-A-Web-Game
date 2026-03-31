@@ -1,161 +1,147 @@
-// --- ESTADO INICIAL DO JOGO ---
-let nivel = 1;
-let vidaMaxima = 100;
-let vidaAtual = vidaMaxima;
-let cliquesTotais = 0;
-let moedas = 0;
+// --- GAME STATE (Tables/Objects) ---
 
-// O dano inicial baseado na fórmula: vidaMaxima / 15 (100 / 15 ≈ 6.67)
-let danoPorClique = vidaMaxima / 15;
+// Configurações e progresso do jogador
+const player = {
+    level: 1,
+    coins: 0,
+    totalClicks: 0,
+    damagePerClick: 3.75 // 5 * (1 * 0.75)
+};
 
-// Selecionando os elementos
-const titulo = document.getElementById('game_title');
-const objeto = document.getElementById('object');
-const barraPreenchimento = document.getElementById('health_fill');
-const nomeObjeto = document.querySelector('.object_name');
+// Estado do alvo (Círculo Dourado)
+const target = {
+    maxHealth: 50,
+    currentHealth: 50,
+    healthMultiplier: 1.5,
+    baseDamageFormula: (level) => 5 * (level * 0.75)
+};
 
-// Selecionando os contadores (ajuste os índices conforme seu HTML)
-const displayMoedas = document.querySelectorAll('.counters')[0];
-const displayDano = document.querySelectorAll('.counters')[1];
-const displayCliques = document.querySelectorAll('.counters')[2];
-const displayVidaObjeto = document.querySelectorAll('.object_counters')[0];
+// Configurações das moedas
+const coinConfig = {
+    valuePerLevel: 1,
+    spawnQuantity: 5,
+    size: 30,
+    safetyMargin: 10,
+    despawnTime: 10000 // 10 segundos
+};
 
-const playField = document.getElementById('play_field');
-const targetWrapper = document.querySelector('.target_wrapper');
+// --- DOM ELEMENTS (UI) ---
+const ui = {
+    targetObject: document.getElementById('object'),
+    healthBar: document.getElementById('health_fill'),
+    nameDisplay: document.querySelector('.object_name'),
+    playField: document.getElementById('play_field'),
+    targetWrapper: document.querySelector('.target_wrapper'),
+    // Counters
+    coinsDisplay: document.querySelectorAll('.counters')[0],
+    damageDisplay: document.querySelectorAll('.counters')[1],
+    clicksDisplay: document.querySelectorAll('.counters')[2],
+    healthText: document.querySelectorAll('.object_counters')[0]
+};
 
-// 3. Função inicial que atualiza a interface visual
-function atualizarInterface() {
-  const porcentagem = (Math.max(0, vidaAtual) / vidaMaxima) * 100;
-  barraPreenchimento.style.width = porcentagem + '%';
-  nomeObjeto.innerText = `Círculo Dourado (Nív. ${nivel})`;
-
-  displayVidaObjeto.innerText =
-    formatarNumero(Math.max(0, vidaAtual)) + ' / ' + formatarNumero(vidaMaxima);
-
-  displayMoedas.innerText = 'Moedas: 0';
-  displayDano.innerText = 'Dano por Clique: ' + formatarNumero(danoPorClique);
-  displayCliques.innerText = 'Cliques: ' + formatarNumero(cliquesTotais);
+// --- INITIALIZATION ---
+function updateUI() {
+    const healthPercentage = (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
+    
+    ui.healthBar.style.width = `${healthPercentage}%`;
+    ui.nameDisplay.innerText = `Golden Circle (Lv. ${player.level})`;
+    
+    ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
+    ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
+    ui.damageDisplay.innerText = `Damage per Click: ${formatNumber(player.damagePerClick)}`;
+    ui.clicksDisplay.innerText = `Clicks: ${formatNumber(player.totalClicks)}`;
 }
 
-atualizarInterface();
+updateUI();
 
-function formatarNumero(num) {
-  if (num >= 1000000000000) return (num / 1000000000000).toFixed(1) + 'T'; // Trilhão
-  if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B'; // Bilhão
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M'; // Milhão
-  if (num >= 1000) return (num / 1000).toFixed(1) + 'K'; // Mil
-  return Math.floor(num).toString(); // Menor que 1000, mostra normal
+// --- HELPER FUNCTIONS ---
+function formatNumber(num) {
+    if (num >= 1e12) return (num / 1e12).toFixed(1) + 'T';
+    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return Math.floor(num).toString();
 }
 
-// FUNÇÃO PARA CRIAR A MOEDA
-// FUNÇÃO PARA CRIAR A MOEDA
-function spawnMoeda() {
-  const moeda = document.createElement('div');
-  moeda.className = 'coin';
-  moeda.innerText = '$';
+// --- CORE GAME FUNCTIONS ---
 
-  let x, y;
-  let tentativa = 0;
-  let estaDentroDaAreaProibida = true;
+function spawnCoin() {
+    const coin = document.createElement('div');
+    coin.className = 'coin';
+    coin.innerText = '$';
 
-  // CONFIGURAÇÕES
-  const moedaTamanho = 40; 
-  const margemSeguranca = 10; // Espaçamento para não nascer grudada na linha vermelha
+    let x, y;
+    let attempts = 0;
+    let isInsideForbiddenArea = true;
 
-  // Pega as dimensões reais da área verde e da área vermelha
-  const fieldRect = playField.getBoundingClientRect();
-  const targetRect = targetWrapper.getBoundingClientRect();
+    const fieldRect = ui.playField.getBoundingClientRect();
+    const targetRect = ui.targetWrapper.getBoundingClientRect();
 
-  // Calcula onde fica a "parede" da área proibida em relação à área verde
-  const proibidoEsquerda = targetRect.left - fieldRect.left - margemSeguranca;
-  const proibidoDireita = targetRect.right - fieldRect.left + margemSeguranca;
-  const proibidoTopo = targetRect.top - fieldRect.top - margemSeguranca;
-  const proibidoBase = targetRect.bottom - fieldRect.top + margemSeguranca;
+    const forbidden = {
+        left: targetRect.left - fieldRect.left - coinConfig.safetyMargin,
+        right: targetRect.right - fieldRect.left + coinConfig.safetyMargin,
+        top: targetRect.top - fieldRect.top - coinConfig.safetyMargin,
+        bottom: targetRect.bottom - fieldRect.top + coinConfig.safetyMargin
+    };
 
-  do {
-    // Sorteia X e Y livremente pela área verde
-    x = Math.random() * (playField.clientWidth - moedaTamanho);
-    y = Math.random() * (playField.clientHeight - moedaTamanho);
+    do {
+        x = Math.random() * (ui.playField.clientWidth - coinConfig.size);
+        y = Math.random() * (ui.playField.clientHeight - coinConfig.size);
 
-    // NOVA MATEMÁTICA DE COLISÃO:
-    // Verifica se a 'caixa' da moeda cruza com a 'caixa' da área proibida
-    const caiuNoX = x + moedaTamanho > proibidoEsquerda && x < proibidoDireita;
-    const caiuNoY = y + moedaTamanho > proibidoTopo && y < proibidoBase;
+        const hitX = x + coinConfig.size > forbidden.left && x < forbidden.right;
+        const hitY = y + coinConfig.size > forbidden.top && y < forbidden.bottom;
 
-    estaDentroDaAreaProibida = caiuNoX && caiuNoY;
+        isInsideForbiddenArea = hitX && hitY;
+        attempts++;
 
-    tentativa++;
+        if (!isInsideForbiddenArea) break;
+    } while (attempts < 50);
 
-    // Se não bateu no X e no Y ao mesmo tempo, está livre!
-    if (!estaDentroDaAreaProibida) break;
-  } while (tentativa < 50);
+    coin.style.left = `${x}px`;
+    coin.style.top = `${y}px`;
 
-  // Aplica as posições finais corretas
-  moeda.style.left = x + 'px';
-  moeda.style.top = y + 'px';
+    coin.addEventListener('click', () => {
+        player.coins += Math.floor(coinConfig.valuePerLevel * player.level);
+        ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
+        coin.remove();
+    });
 
-  // Evento de Coleta
-  moeda.addEventListener('click', () => {
-    moedas += Math.floor(nivel * 1.2);
-    displayMoedas.innerText = `Moedas: ${formatarNumero(moedas)}`;
-    moeda.remove();
-  });
+    // Auto-despawn
+    setTimeout(() => { if (coin) coin.remove(); }, coinConfig.despawnTime);
 
-  // Opcional: A moeda some sozinha após 10 segundos se não coletar
-  setTimeout(() => {
-    if (moeda) moeda.remove();
-  }, 10000);
-
-  playField.appendChild(moeda);
+    ui.playField.appendChild(coin);
 }
 
+function handleTargetClick() {
+    // 1. Damage Logic
+    target.currentHealth -= player.damagePerClick;
+    player.totalClicks++;
 
-function clicarObjeto() {
-  // 1. Aplicar Dano
-  
-  vidaAtual -= danoPorClique;
-  cliquesTotais++;
+    // 2. Death / Level Up Logic
+    if (Math.floor(target.currentHealth) <= 0) {
+        // Spawn rewards
+        for (let i = 0; i < coinConfig.spawnQuantity; i++) {
+            spawnCoin();
+        }
 
-  // 2. Verificar se o objeto "morreu" (Level Up)
-  if (Math.floor(vidaAtual) <= 0) {
-    for (let i = 0; i < 20; i++) {
-      spawnMoeda();
+        player.level++;
+
+        // Scaling Progression
+        target.maxHealth = Math.floor(target.maxHealth * target.healthMultiplier);
+        target.currentHealth = target.maxHealth;
+        player.damagePerClick = target.baseDamageFormula(player.level);
+
+        console.log(`Level Up! New Health: ${target.maxHealth}, New Damage: ${player.damagePerClick}`);
     }
 
-    nivel++;
-
-    // Lógica de Progressão:
-    vidaMaxima = Math.floor(vidaMaxima * 1.5); // Aumenta 1.5x (arredondado)
-    vidaAtual = vidaMaxima; // Cura o objeto para o novo nível
-
-    danoPorClique = vidaMaxima / 15; // Novo dano baseado na nova vida
-
-    // Atualizar o nome para mostrar o Nível
-    nomeObjeto.innerText = `Círculo Dourado (Nív. ${nivel})`;
-
-    console.log(
-      `Level Up! Nova Vida: ${vidaMaxima}, Novo Dano: ${danoPorClique}`,
-    );
-  }
-  displayVidaObjeto.innerText =
-    formatarNumero(Math.max(0, vidaAtual)) + ' / ' + formatarNumero(vidaMaxima);
-
-  // 3. Atualização Visual da Barra
-  const porcentagem = (Math.max(0, vidaAtual) / vidaMaxima) * 100;
-  barraPreenchimento.style.width = porcentagem + '%';
-
-  // 4. Atualizar os contadores na tela
-  displayDano.innerText = 'Dano por Clique: ' + formatarNumero(danoPorClique);
-  displayCliques.innerText = 'Cliques: ' + formatarNumero(cliquesTotais);
-
-  // Efeito de clique (feedback visual)
-  objeto.style.transform = 'scale(0.9)';
-  setTimeout(() => (objeto.style.transform = 'scale(1)'), 50);
+    // 3. Visual Feedback
+    updateUI();
+    ui.targetObject.style.transform = 'scale(0.9)';
+    setTimeout(() => (ui.targetObject.style.transform = 'scale(1)'), 50);
 }
 
-objeto.addEventListener('click', () => {
-  setTimeout(() => {
-    clicarObjeto();
-  }, 150);
-  // Pequeno delay para garantir que o clique seja registrado antes de atualizar a interface
+// --- EVENT LISTENERS ---
+ui.targetObject.addEventListener('click', () => {
+    // Slight delay to simulate responsiveness
+    setTimeout(handleTargetClick, 150);
 });
