@@ -18,11 +18,41 @@ const target = {
 
 // Configurações das moedas
 const coinConfig = {
-    valuePerLevel: 1,
-    spawnQuantity: 5,
-    size: 30,
-    safetyMargin: 10,
-    despawnTime: 10000 // 10 segundos
+  size: 30,
+  safetyMargin: 10,
+  despawnTime: 10000,
+  spawnQuantity: 5,
+  // NOVA TABELA DE RARIDADE
+  types: [
+    {
+      name: 'Bronze',
+      chance: 0.6,
+      multiplier: 1,
+      color: '#cd7f32',
+      border: '#8b4513',
+    },
+    {
+      name: 'Silver',
+      chance: 0.25,
+      multiplier: 3,
+      color: '#c0c0c0',
+      border: '#808080',
+    },
+    {
+      name: 'Gold',
+      chance: 0.14,
+      multiplier: 10,
+      color: '#ffd700',
+      border: '#b8860b',
+    },
+    {
+      name: 'Diamond',
+      chance: 0.01,
+      multiplier: 50,
+      color: '#b9f2ff',
+      border: '#00ced1',
+    },
+  ],
 };
 
 // --- DOM ELEMENTS (UI) ---
@@ -66,50 +96,71 @@ function formatNumber(num) {
 // --- CORE GAME FUNCTIONS ---
 
 function spawnCoin() {
-    const coin = document.createElement('div');
-    coin.className = 'coin';
-    coin.innerText = '$';
+  const coin = document.createElement('div');
+  coin.className = 'coin';
 
-    let x, y;
-    let attempts = 0;
-    let isInsideForbiddenArea = true;
+  // --- LÓGICA DE SORTEIO (RARIDADE) ---
+  const rand = Math.random();
+  let selectedType = coinConfig.types[0]; // Padrão: Bronze
+  let cumulativeChance = 0;
 
-    const fieldRect = ui.playField.getBoundingClientRect();
-    const targetRect = ui.targetWrapper.getBoundingClientRect();
+  for (const type of coinConfig.types) {
+    cumulativeChance += type.chance;
+    if (rand < cumulativeChance) {
+      selectedType = type;
+      break;
+    }
+  }
 
-    const forbidden = {
-        left: targetRect.left - fieldRect.left - coinConfig.safetyMargin,
-        right: targetRect.right - fieldRect.left + coinConfig.safetyMargin,
-        top: targetRect.top - fieldRect.top - coinConfig.safetyMargin,
-        bottom: targetRect.bottom - fieldRect.top + coinConfig.safetyMargin
-    };
+  // Calcula o valor baseado no nível e multiplicador da raridade
+  const coinValue = Math.floor(player.level * selectedType.multiplier);
 
-    do {
-        x = Math.random() * (ui.playField.clientWidth - coinConfig.size);
-        y = Math.random() * (ui.playField.clientHeight - coinConfig.size);
+  // Define a aparência e o texto
+  coin.innerText = `+${formatNumber(coinValue)}`;
+  coin.style.backgroundColor = selectedType.color;
+  coin.style.borderColor = selectedType.border;
+  coin.style.color = selectedType.border; // Texto da mesma cor da borda para ler melhor
+  let x, y;
+  let attempts = 0;
+  let isInsideForbiddenArea = true;
 
-        const hitX = x + coinConfig.size > forbidden.left && x < forbidden.right;
-        const hitY = y + coinConfig.size > forbidden.top && y < forbidden.bottom;
+  const fieldRect = ui.playField.getBoundingClientRect();
+  const targetRect = ui.targetWrapper.getBoundingClientRect();
 
-        isInsideForbiddenArea = hitX && hitY;
-        attempts++;
+  const forbidden = {
+    left: targetRect.left - fieldRect.left - coinConfig.safetyMargin,
+    right: targetRect.right - fieldRect.left + coinConfig.safetyMargin,
+    top: targetRect.top - fieldRect.top - coinConfig.safetyMargin,
+    bottom: targetRect.bottom - fieldRect.top + coinConfig.safetyMargin,
+  };
 
-        if (!isInsideForbiddenArea) break;
-    } while (attempts < 50);
+  do {
+    x = Math.random() * (ui.playField.clientWidth - coinConfig.size);
+    y = Math.random() * (ui.playField.clientHeight - coinConfig.size);
 
-    coin.style.left = `${x}px`;
-    coin.style.top = `${y}px`;
+    const hitX = x + coinConfig.size > forbidden.left && x < forbidden.right;
+    const hitY = y + coinConfig.size > forbidden.top && y < forbidden.bottom;
 
-    coin.addEventListener('click', () => {
-        player.coins += Math.floor(coinConfig.valuePerLevel * player.level);
-        ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
-        coin.remove();
-    });
+    isInsideForbiddenArea = hitX && hitY;
+    attempts++;
 
-    // Auto-despawn
-    setTimeout(() => { if (coin) coin.remove(); }, coinConfig.despawnTime);
+    if (!isInsideForbiddenArea) break;
+  } while (attempts < 50);
 
-    ui.playField.appendChild(coin);
+  coin.style.left = `${x}px`;
+  coin.style.top = `${y}px`;
+
+  // --- COLETA ---
+  coin.addEventListener('click', () => {
+    player.coins += coinValue; // Adiciona o valor real calculado
+    ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
+    coin.remove();
+  });
+
+  setTimeout(() => {
+    if (coin) coin.remove();
+  }, coinConfig.despawnTime);
+  ui.playField.appendChild(coin);
 }
 
 function handleTargetClick() {

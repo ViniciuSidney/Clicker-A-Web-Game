@@ -90,21 +90,20 @@ main {
 }
 
 .coin {
-    position: absolute; /* Para brotar em qualquer lugar */
-    width: 20px;
-    height: 20px;
-    background-color: #ffd700;
-    border: 3px solid #b8860b;
+    position: absolute;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    color: #b8860b;
+    font-size: 0.8rem; /* Diminuir um pouco para caber o texto +5 */
     user-select: none;
     animation: spawnCoin 0.3s ease-out;
     z-index: 5;
+    border: 3px solid; /* Deixe apenas a borda, a cor virá do JS */
 }
 
 @keyframes spawnCoin {
