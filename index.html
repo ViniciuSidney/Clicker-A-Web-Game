@@ -4,49 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Clicker Game v0.2.5</title>
+    <title>Clicker Game v0.2.8</title>
   </head>
-<body>
-  <main>
-    <div id="game">
-      <div class="header">
-        <h1 id="game_title">Clicker Game</h1>
-        <h2 id="game_version">v0.2.5</h2>
-      </div>
-
-      <div class="hud">
-        <div class="hud-top">
-          <p class="counters" id="coin_c">Moedas: 0</p>
-          <p class="counters" id="damage_c">Dano por Clique: 1</p>
+  <body>
+    <main>
+      <div id="game">
+        <div class="header">
+          <h1 id="game_title">Clicker Game</h1>
+          <h2 id="game_version">v0.2.8</h2>
         </div>
 
-        <div class="hud-bottom">
-          <div class="player_xp_container">
-            <div class="player_xp_fill" id="xp_fill" style="width: 50%"></div>
-            <span class="player_xp_text" >Nv. 1 (50%)</span>
+        <div class="hud">
+          <div class="hud-top">
+            <p class="counters" id="coin_c">Moedas: 0</p>
+            <p class="counters" id="damage_c">Dano por Clique: 1</p>
+          </div>
+
+          <div class="hud-bottom">
+            <div class="player_xp_container">
+              <div class="player_xp_fill" id="xp_fill" style="width: 50%"></div>
+              <span class="player_xp_text">Nv. 1 (50%)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="play_area" id="play_field">
+          <div id="progression_container">
+            <div id="round_text">Rodada 1</div>
+            <div id="progression_circles"></div>
+          </div>
+          <div id="stage_multiplier">
+            Multiplicador de Moedas: <span id="mult_value">x1.0</span>
+          </div>
+          <div class="target_wrapper">
+            <p class="object_name">Círculo Dourado</p>
+            <div class="objects" id="object"></div>
+            <div class="health_bar_container">
+              <div
+                class="health_bar_fill"
+                id="health_fill"
+                style="width: 50%"
+              ></div>
+            </div>
+            <p class="object_counters" id="health_text">5 / 10</p>
           </div>
         </div>
       </div>
+    </main>
 
-      <div class="play_area" id="play_field">
-        <div id="stage_multiplier">
-          Multiplicador de Moedas: <span id="mult_value">x1.0</span>
-        </div>
-        <div class="target_wrapper">
-          <p class="object_name">Círculo Dourado</p>
-          <div class="objects" id="object"></div>
-          <div class="health_bar_container">
-            <div class="health_bar_fill" id="health_fill" style="width: 50%"></div>
-          </div>
-          <p class="object_counters" id="health_text">5 / 10</p>
-        </div>
-      </div>
-    </div> </main>
+    <footer>
+      <p>&copy; 2026 - Todos os direitos reservados.</p>
+    </footer>
 
-  <footer>
-    <p>&copy; 2026 - Todos os direitos reservados.</p>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

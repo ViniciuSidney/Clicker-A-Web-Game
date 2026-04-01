@@ -91,6 +91,9 @@ const ui = {
   xpText: document.querySelector(".player_xp_text"),
 
   healthText: document.querySelectorAll(".object_counters")[0],
+
+  roundText: document.getElementById("round_text"),
+  progressionCircles: document.getElementById("progression_circles"),
 };
 
 // --- INITIALIZATION ---
@@ -118,6 +121,32 @@ function updateUI() {
     currentTargetData.rewardMultiplier
   ).toFixed(1);
   ui.multDisplay.innerText = `x${targetMultiplier}`;
+
+  // --- NOVA LÓGICA DO RASTREADOR DE PROGRESSÃO ---
+  
+  // 1. Atualiza o texto da rodada
+  ui.roundText.innerText = `Rodada ${target.round}`;
+
+  // 2. Limpa os círculos antigos da tela para desenhar os novos
+  ui.progressionCircles.innerHTML = '';
+
+  // 3. Cria um círculo para cada alvo que existe na sua targetList
+  for (let i = 0; i < targetList.length; i++) {
+    const circle = document.createElement('div');
+    circle.classList.add('prog-circle');
+
+    // Define a cor baseada no índice atual em relação ao inimigo atual
+    if (i < target.currentIndex) {
+      circle.classList.add('prog-defeated'); // Inimigos que já morreram nesta rodada
+    } else if (i === target.currentIndex) {
+      circle.classList.add('prog-current');  // Inimigo que estamos batendo agora
+    } else {
+      circle.classList.add('prog-upcoming'); // Inimigos que ainda vão aparecer
+    }
+
+    // Adiciona o círculo desenhado na tela
+    ui.progressionCircles.appendChild(circle);
+  }
 }
 
 updateUI();
@@ -251,7 +280,7 @@ function handleTargetClick() {
   player.totalClicks++;
 
   if (Math.floor(target.currentHealth) <= 0) {
-    // 1. Spawna as moedas com um bônus extra baseado na dificuldade do alvo!
+    
     const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
     for (let i = 0; i < bonusQuantity; i++) {
       spawnCoin();
