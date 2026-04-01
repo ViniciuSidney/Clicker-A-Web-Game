@@ -51,7 +51,7 @@ main {
     display: flex;
     flex-direction: column; /* Empilha linha de cima e linha de baixo */
     align-items: center;    /* Centraliza tudo horizontalmente */
-    padding: 0 0 10px 0;        /* Dá um respiro interno */
+    padding: 0 0 15px 0;        /* Dá um respiro interno */
     background: #333;
     gap: 10px;              /* Espaço entre os contadores e a barra */
     font-size: 1rem;
@@ -69,14 +69,17 @@ main {
     padding: 0.5% 2%;
     color: #eee;
     font-size: smaller;
+    font-weight: bold;
 }
 
 #coin_c {
-    background-color: #7c7e0f; /* Verde para dinheiro */
+    background-color: #c0a012; /* Verde para dinheiro */
+    color: #fff1c4;
 }
 
 #damage_c {
-    background-color: #704643; /* Vermelho para dano */
+    background-color: #d65454; /* Vermelho para dano */
+    color: #ffcbcb;
 }
 
 /* --- NOVA BARRA DE XP NO HUD --- */
@@ -257,7 +260,7 @@ main {
     /* width: 20%; <-- Mude para um tamanho fixo em pixels para ter mais controle */
     width: 250px; 
     padding: 20px; /* Dá um respiro para o alvo e a barra não colarem na borda */
-    z-index: 10;
+    z-index: 100;
 
     /* Mantive suas cores de teste para você visualizar a área proibida
     border: 3px solid red;
@@ -299,8 +302,7 @@ main {
     pointer-events: none;     /* Garante que o clique não "atrapalhe" a partícula */
     z-index: 1000;            /* Fica acima de tudo na playarea */
     
-    /* Aplica a animação: 0.8s, animação linear, e para no final */
-    animation: particleExplosion 0.8s ease-out forwards; 
+    animation: particleExplosion 1.1s ease-out forwards; 
 }
 
 /* Nossas Novas Formas Geométricas */
@@ -318,6 +320,39 @@ main {
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
 }
 
+/* --- ANIMAÇÃO DE QUEBRA (ESTILHAÇO) --- */
+@keyframes fragmentShatter {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(.3); /* Posição inicial centralizada */
+        opacity: .8; /* Totalmente visível */
+    }
+    100% {
+        /* Flutua para fora usando variáveis CSS aleatórias geradas pelo JS */
+        transform: translate(var(--frag-tx), var(--frag-ty)) rotate(var(--frag-rot)) scale(0.1);
+        opacity: 0; /* Desaparece */
+    }
+}
+
+/* Classe dos Cacos (Estilhaços) */
+.shatter-fragment {
+    position: absolute;
+    z-index: 50; /* Acima do alvo, abaixo da HUD se houver sobreposição */
+    pointer-events: none; /* Não atrapalha cliques enquanto está quebrando */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Uma borda leve para separar os cacos se forem quadrados */
+    
+    /* Aplica a animação: 0.8s, suave no final, para no final */
+    animation: fragmentShatter 0.7s ease-out forwards;
+}
+
+/* Ajustes necessários nas formas geométricas para os cacos */
+/* Os cacos herdam a forma (.shape-circle etc) do alvo real via JS */
+
+.shatter-fragment.shape-triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    border: none; /* Clip-path corta bordas padrão, então removemos a borda leve */
+}
+/* Quadrados e Círculos já funcionam com a classe shatter-fragment padrão */
+
 /* Estilo do Nome */
 .object_name {
     margin: 0 auto;
@@ -328,22 +363,23 @@ main {
 
 /* Estilo do Container da Barra (A borda/fundo da barra) */
 .health_bar_container {
-    width: 150px;       /* Um pouco mais larga que o círculo */
+    width: 150px;      
     height: 12px;
     background-color: #522828; /* Cor de fundo "vazia" */
     /* border: 2px solid #3d1c1c; */
     border-radius: 7px;
     overflow: hidden;   /* Garante que o preenchimento não vaze */
+
 }
 
 /* Estilo do Preenchimento (A parte colorida da vida) */
 .health_bar_fill {
     height: 100%;
-    background-color: #ac4e4e; /* Cor vermelha de vida */
+    background-color: #d65454; /* Cor vermelha de vida */
     transition: width 0.150s ease-out; /* Animação suave quando a vida muda */
 }
 
-.health_text {
+#health_text {
     margin: 0;
     color: white;
     font-size: 0.9rem;

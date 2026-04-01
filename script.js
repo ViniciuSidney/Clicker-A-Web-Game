@@ -284,74 +284,119 @@ function spawnCoin() {
 }
 
 function handleTargetClick(clickX, clickY) {
+  // --- Precisamos dos dados do alvo *atual* (o que vai levar dano/morrer) ---
+  const currentTargetData = targetList[target.currentIndex]; // Salvamos antes de mudar nada
+
+  // --- LÓGICA DE PARTÍCULAS DE BRILHO (Faíscas do clique normal) ---
+  const numParticles = 10;
+  for (let i = 0; i < numParticles; i++) {
+    const particle = document.createElement("div");
+    particle.className = "target-particle";
+
+    const randomX = (Math.random() - 0.5) * 150;
+    const randomY = -(Math.random() * 80 + 20);
+    const randomRotate = (Math.random() - 0.5) * 360;
+
+    particle.style.setProperty("--rand-x", `${randomX}px`);
+    particle.style.setProperty("--rand-y", `${randomY}px`);
+    particle.style.setProperty("--rand-rotate", `${randomRotate}deg`);
+
+    const fieldRect = ui.playField.getBoundingClientRect();
+    particle.style.left = `${clickX - fieldRect.left}px`;
+    particle.style.top = `${clickY - fieldRect.top}px`;
+
+    ui.playField.appendChild(particle);
+
+    setTimeout(() => { if (particle) particle.remove(); }, 800);
+  }
+
+  // --- LÓGICA DE DANO ---
   target.currentHealth -= player.damagePerClick;
   player.totalClicks++;
 
+  // --- VERIFICA DERROTA ---
   if (Math.floor(target.currentHealth) <= 0) {
+    // 1. Spawna moedas normal
     const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
     for (let i = 0; i < bonusQuantity; i++) {
       spawnCoin();
     }
 
-    player.level++;
+    // --- NOVO: EFEITO DE SHATTER (QUEBRA) ---
+    const rect = ui.targetObject.getBoundingClientRect();
+    const fieldRect = ui.playField.getBoundingClientRect();
 
-    // 2. Avança para o próximo alvo
-    target.currentIndex++;
+    // Escondemos o objeto real momentaneamente para dar lugar aos fragmentos
+    // Isso evita que o próximo inimigo apareça *imediatamente* sobre a explosão
+    ui.targetObject.style.opacity = "0";
 
-    // Se passamos do último da lista, voltamos pro primeiro e aumentamos a Rodada (Round)
-    if (target.currentIndex >= targetList.length) {
-      target.currentIndex = 0;
-      target.round++;
-      console.log(`Rodada ${target.round} iniciada!`);
+    const numFragments = 18; // Quantidade de cacos
+    for (let j = 0; j < numFragments; j++) {
+        const fragment = document.createElement("div");
+        // Copiamos a classe da forma e a classe dos cacos
+        fragment.className = `shatter-fragment ${currentTargetData.shape}`;
+        fragment.style.backgroundColor = currentTargetData.color;
+
+        // Parâmetros aleatórios de trajetória e rotação
+        const tx = (Math.random() - 0.5) * 200; // Deslocamento X entre -100 e 100px
+        const ty = Math.random() * 150 + 50; // Deslocamento Y (sempre descendo), entre 50 e 200px
+        const rot = (Math.random() - 0.5) * 360; // Rotação aleatória
+
+        // Definimos as variáveis CSS para a animação
+        fragment.style.setProperty("--frag-tx", `${tx}px`);
+        fragment.style.setProperty("--frag-ty", `${ty}px`);
+        fragment.style.setProperty("--frag-rot", `${rot}deg`);
+
+        // Posição inicial centralizada sobre o alvo real
+        // O tamanho dos cacos é o mesmo do alvo original, mas eles diminuem (scale) na animação
+        fragment.style.left = `${rect.left - fieldRect.left}px`;
+        fragment.style.top = `${rect.top - fieldRect.top}px`;
+        fragment.style.width = `${rect.width}px`;
+        fragment.style.height = `${rect.height}px`;
+
+        ui.playField.appendChild(fragment);
+
+        // Limpeza após a animação (0.8s)
+        setTimeout(() => { if (fragment) fragment.remove(); }, 1100);
     }
 
-    // 3. Puxa os dados do NOVO alvo que vamos enfrentar
-    const nextTargetData = targetList[target.currentIndex];
-
-    target.maxHealth = Math.floor(
-      nextTargetData.baseHealth * Math.pow(2, target.round - 1),
-    );
-    target.currentHealth = target.maxHealth;
-
-    // Atualiza o dano do jogador
-    player.damagePerClick = target.baseDamageFormula(player.level);
-  }
-
-  // --- NOVA LÓGICA DE PARTÍCULAS DE BRILHO ---
-
-  // 1. Define a quantidade de partículas por clique
-  const numParticles = 10;
-
-  
-  for (let i = 0; i < numParticles; i++) {
-    // 2. Cria o elemento da partícula
-    const particle = document.createElement("div");
-    particle.className = "target-particle";
-
-    // 3. Calcula posições aleatórias de deslocamento (translate) e rotação
-    const randomX = (Math.random() - 0.5) * 150; // Deslocamento X entre -75 e 75px
-    const randomY = -(Math.random() * 80 + 20); // Deslocamento Y para cima, entre -20 e -100px
-    const randomRotate = (Math.random() - 0.5) * 360; // Rotação aleatória entre -180 e 180deg
-
-    // 4. Define as variáveis CSS para a animação
-    particle.style.setProperty("--rand-x", `${randomX}px`);
-    particle.style.setProperty("--rand-y", `${randomY}px`);
-    particle.style.setProperty("--rand-rotate", `${randomRotate}deg`);
-
-    // 5. Posiciona a partícula exatamente onde o cursor clicou
-    particle.style.left = `${clickX - ui.playField.getBoundingClientRect().left}px`;
-    particle.style.top = `${clickY - ui.playField.getBoundingClientRect().top}px`;
-
-    // 6. Adiciona a partícula na playarea para a animação começar
-    ui.playField.appendChild(particle);
-
-    // 7. Configura a remoção da partícula após a animação (0.8s)
+    // --- LÓGICA DE PROGRESSÃO (Movemos para um setTimeout pequeno para deixar a quebra acontecer) ---
     setTimeout(() => {
-      if (particle) particle.remove();
-    }, 800); // 800ms é a duração da animação no CSS
+        player.level++;
+
+        // Avança index...
+        target.currentIndex++;
+
+        if (target.currentIndex >= targetList.length) {
+          target.currentIndex = 0;
+          target.round++;
+          console.log(`Rodada ${target.round} iniciada!`);
+        }
+
+        // Puxa novos dados do próximo alvo
+        const nextTargetData = targetList[target.currentIndex];
+
+        target.maxHealth = Math.floor(
+          nextTargetData.baseHealth * Math.pow(2, target.round - 1),
+        );
+        target.currentHealth = target.maxHealth;
+
+        // Atualiza o dano do jogador
+        player.damagePerClick = target.baseDamageFormula(player.level);
+
+        // Atualiza a HUD e troca o alvo real (que ainda está invisível)
+        updateUI();
+
+        // Mostramos o objeto real novamente (carregando o NOVO alvo)
+        ui.targetObject.style.opacity = "1";
+    }, 150); // A quebra começa e 150ms depois o novo alvo aparece suavemente
+
+  } else {
+    // Se não morreu, apenas atualiza a HUD normal (barra de vida descendo)
+    updateUI();
   }
 
-  updateUI();
+  // Efeito de clique normal (escala)
   ui.targetObject.style.transform = "scale(0.9)";
   setTimeout(() => (ui.targetObject.style.transform = "scale(1)"), 50);
 }
