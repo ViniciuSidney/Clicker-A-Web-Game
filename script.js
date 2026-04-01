@@ -4,25 +4,29 @@ const player = {
   level: 1,
   coins: 0,
   damagePerClick: 5,
+  totalClicks: 0,
 };
 
 // --- NOVA LISTA DE ALVOS ---
 const targetList = [
-  { // Alvo 1: Fácil 
+  {
+    // Alvo 1: Fácil
     name: "Círculo Dourado",
     color: "gold",
     shape: "shape-circle",
     baseHealth: 10,
     rewardMultiplier: 1,
   },
-  { // Alvo 2: Médio
+  {
+    // Alvo 2: Médio
     name: "Quadrado Carmesim",
     color: "crimson",
     shape: "shape-square",
     baseHealth: 30,
     rewardMultiplier: 2,
   },
-  { // Alvo 3: Difícil
+  {
+    // Alvo 3: Difícil
     name: "Triângulo Esmeralda",
     color: "mediumseagreen",
     shape: "shape-triangle",
@@ -45,28 +49,32 @@ const coinConfig = {
   safetyMargin: 10,
   despawnTime: 10000,
   types: [
-    { // Raridade: Comum
+    {
+      // Raridade: Comum
       name: "Bronze",
       chance: 0.7,
       multiplier: 1,
       color: "#cd7f32",
       border: "#8b4513",
     },
-    { // Raridade: Incomum
+    {
+      // Raridade: Incomum
       name: "Silver",
       chance: 0.25,
       multiplier: 3,
       color: "#c0c0c0",
       border: "#808080",
     },
-    { // Raridade: Raro
+    {
+      // Raridade: Raro
       name: "Gold",
       chance: 0.04,
       multiplier: 10,
       color: "#ffd700",
       border: "#b8860b",
     },
-    { // Raridade: Lendário
+    {
+      // Raridade: Lendário
       name: "Diamond",
       chance: 0.01,
       multiplier: 50,
@@ -123,25 +131,25 @@ function updateUI() {
   ui.multDisplay.innerText = `x${targetMultiplier}`;
 
   // --- NOVA LÓGICA DO RASTREADOR DE PROGRESSÃO ---
-  
+
   // 1. Atualiza o texto da rodada
   ui.roundText.innerText = `Rodada ${target.round}`;
 
   // 2. Limpa os círculos antigos da tela para desenhar os novos
-  ui.progressionCircles.innerHTML = '';
+  ui.progressionCircles.innerHTML = "";
 
   // 3. Cria um círculo para cada alvo que existe na sua targetList
   for (let i = 0; i < targetList.length; i++) {
-    const circle = document.createElement('div');
-    circle.classList.add('prog-circle');
+    const circle = document.createElement("div");
+    circle.classList.add("prog-circle");
 
     // Define a cor baseada no índice atual em relação ao inimigo atual
     if (i < target.currentIndex) {
-      circle.classList.add('prog-defeated'); // Inimigos que já morreram nesta rodada
+      circle.classList.add("prog-defeated"); // Inimigos que já morreram nesta rodada
     } else if (i === target.currentIndex) {
-      circle.classList.add('prog-current');  // Inimigo que estamos batendo agora
+      circle.classList.add("prog-current"); // Inimigo que estamos batendo agora
     } else {
-      circle.classList.add('prog-upcoming'); // Inimigos que ainda vão aparecer
+      circle.classList.add("prog-upcoming"); // Inimigos que ainda vão aparecer
     }
 
     // Adiciona o círculo desenhado na tela
@@ -163,8 +171,8 @@ function formatNumber(num) {
 // --- CORE GAME FUNCTIONS ---
 
 function spawnCoin() {
-  const coin = document.createElement('div');
-  coin.className = 'coin';
+  const coin = document.createElement("div");
+  coin.className = "coin";
 
   // --- LÓGICA DE SORTEIO (RARIDADE) ---
   const rand = Math.random();
@@ -189,13 +197,13 @@ function spawnCoin() {
   coin.dataset.value = coinValue;
 
   // 1. Cria o elemento do Nível (Verde)
-  const levelText = document.createElement('span');
-  levelText.className = 'coin_level';
+  const levelText = document.createElement("span");
+  levelText.className = "coin_level";
   levelText.innerText = `Nv.${target.round}`; // Usa o nível da rodada
 
   // 2. Cria o elemento do Valor (Amarelo com +)
-  const valueText = document.createElement('span');
-  valueText.className = 'coin_value';
+  const valueText = document.createElement("span");
+  valueText.className = "coin_value";
   // Use Math.floor para garantir que seja um número inteiro simples
   valueText.innerText = `${Math.floor(coinValue)}c`;
 
@@ -239,7 +247,7 @@ function spawnCoin() {
   coin.style.top = `${y}px`;
 
   // --- COLETA (COM ANIMAÇÃO) ---
-  coin.addEventListener('click', () => {
+  coin.addEventListener("click", () => {
     // 1. Atualiza o saldo do jogador (Mantenha sua lógica atual)
     player.coins += coinValue;
     ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
@@ -247,8 +255,8 @@ function spawnCoin() {
     // --- NOVA LÓGICA DE ANIMAÇÃO ---
 
     // 2. Cria o elemento de texto flutuante temporário
-    const floatingScore = document.createElement('div');
-    floatingScore.className = 'floating_score';
+    const floatingScore = document.createElement("div");
+    floatingScore.className = "floating_score";
     floatingScore.innerText = `+${formatNumber(coinValue)}`; // Copia o valor
 
     // 3. Posiciona o texto flutuante EXATAMENTE onde a moeda estava
@@ -275,12 +283,11 @@ function spawnCoin() {
   ui.playField.appendChild(coin);
 }
 
-function handleTargetClick() {
+function handleTargetClick(clickX, clickY) {
   target.currentHealth -= player.damagePerClick;
   player.totalClicks++;
 
   if (Math.floor(target.currentHealth) <= 0) {
-    
     const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
     for (let i = 0; i < bonusQuantity; i++) {
       spawnCoin();
@@ -310,13 +317,52 @@ function handleTargetClick() {
     player.damagePerClick = target.baseDamageFormula(player.level);
   }
 
+  // --- NOVA LÓGICA DE PARTÍCULAS DE BRILHO ---
+
+  // 1. Define a quantidade de partículas por clique
+  const numParticles = 10;
+
+  
+  for (let i = 0; i < numParticles; i++) {
+    // 2. Cria o elemento da partícula
+    const particle = document.createElement("div");
+    particle.className = "target-particle";
+
+    // 3. Calcula posições aleatórias de deslocamento (translate) e rotação
+    const randomX = (Math.random() - 0.5) * 150; // Deslocamento X entre -75 e 75px
+    const randomY = -(Math.random() * 80 + 20); // Deslocamento Y para cima, entre -20 e -100px
+    const randomRotate = (Math.random() - 0.5) * 360; // Rotação aleatória entre -180 e 180deg
+
+    // 4. Define as variáveis CSS para a animação
+    particle.style.setProperty("--rand-x", `${randomX}px`);
+    particle.style.setProperty("--rand-y", `${randomY}px`);
+    particle.style.setProperty("--rand-rotate", `${randomRotate}deg`);
+
+    // 5. Posiciona a partícula exatamente onde o cursor clicou
+    particle.style.left = `${clickX - ui.playField.getBoundingClientRect().left}px`;
+    particle.style.top = `${clickY - ui.playField.getBoundingClientRect().top}px`;
+
+    // 6. Adiciona a partícula na playarea para a animação começar
+    ui.playField.appendChild(particle);
+
+    // 7. Configura a remoção da partícula após a animação (0.8s)
+    setTimeout(() => {
+      if (particle) particle.remove();
+    }, 800); // 800ms é a duração da animação no CSS
+  }
+
   updateUI();
   ui.targetObject.style.transform = "scale(0.9)";
   setTimeout(() => (ui.targetObject.style.transform = "scale(1)"), 50);
 }
 
 // --- EVENT LISTENERS ---
-ui.targetObject.addEventListener("click", () => {
-  // Slight delay to simulate responsiveness
-  setTimeout(handleTargetClick, 150);
+ui.targetObject.addEventListener("click", (e) => {
+  // Pegamos a posição do mouse no momento exato do clique
+  const x = e.clientX;
+  const y = e.clientY;
+
+  // Passamos o X e Y para a função
+  // Sugestão: 150ms de delay é muito para um clicker, reduzi para 10ms
+  setTimeout(() => handleTargetClick(x, y), 10); 
 });
