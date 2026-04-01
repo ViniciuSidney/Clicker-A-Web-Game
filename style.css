@@ -1,6 +1,6 @@
 
 *{
-   font-family: monospace;
+    font-family: monospace;
 }
 
 /* Remove margens padrão e trava o scroll */
@@ -67,21 +67,16 @@ main {
 .counters {
     margin: 8px;
     padding: 0.5% 2%;
-    background-color: #555;
     color: #eee;
     font-size: smaller;
 }
 
-#money_c {
-    background-color: #65693c; /* Verde para dinheiro */
+#coin_c {
+    background-color: #7c7e0f; /* Verde para dinheiro */
 }
 
 #damage_c {
     background-color: #704643; /* Vermelho para dano */
-}
-
-#click_c {
-    background-color: #395368; /* Azul para cliques */
 }
 
 /* --- NOVA BARRA DE XP NO HUD --- */
@@ -109,7 +104,7 @@ main {
 
 .player_xp_text {
     position: relative; /* Fica acima do preenchimento */
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: white;
     font-weight: bold;
     text-shadow: 1px 1px 2px rgb(0, 42, 21);
@@ -145,13 +140,13 @@ main {
 }
 
 /* Novo: Estilo do texto do Nível (Verde) */
-.coin-level {
+.coin_level {
     font-size: 0.65rem;  /* Um pouco menor, no topo */
     font-weight: bold;
 }
 
 /* Novo: Estilo do texto do Valor (Amarelo com +) */
-.coin-value {
+.coin_value {
     font-size: 0.75rem; /* Um pouco maior, embaixo */
     font-weight: bold;
     margin-top: -2px;   /* Ajuste fino para aproximar os números */
@@ -178,7 +173,7 @@ main {
 }
 
 /* Novo: Classe para o texto flutuante */
-.floating-score {
+.floating_score {
     position: absolute;      /* Essencial para sobrepor a moeda */
     font-size: 0.8rem;       /* Tamanho para ser visível */
     color: #ffd700;          /* Cor amarela idêntica ao valor da moeda */

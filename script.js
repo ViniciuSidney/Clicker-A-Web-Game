@@ -3,8 +3,7 @@
 const player = {
   level: 1,
   coins: 0,
-  totalClicks: 0,
-  damagePerClick: 3.75,
+  damagePerClick: 5,
 };
 
 // --- NOVA LISTA DE ALVOS ---
@@ -37,7 +36,7 @@ const target = {
   round: 1, // Quantas vezes já completamos a lista inteira
   maxHealth: 10,
   currentHealth: 10,
-  baseDamageFormula: (level) => 5 * (level * 0.75),
+  baseDamageFormula: (level) => 5 * Math.pow(1.2, level),
 };
 
 const coinConfig = {
@@ -86,7 +85,6 @@ const ui = {
   targetWrapper: document.querySelector(".target_wrapper"),
   coinsDisplay: document.querySelectorAll(".counters")[0],
   damageDisplay: document.querySelectorAll(".counters")[1],
-  clicksDisplay: document.querySelectorAll(".counters")[2],
   multDisplay: document.getElementById("mult_value"),
 
   xpBar: document.getElementById("xp_fill"),
@@ -104,12 +102,11 @@ function updateUI() {
   ui.healthBar.style.width = `${healthPercentage}%`;
   ui.nameDisplay.innerHTML = `${currentTargetData.name}<br>(Nível ${target.round})`;
   ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
-  ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
-  ui.damageDisplay.innerText = `Damage per Click: ${formatNumber(player.damagePerClick)}`;
-  ui.clicksDisplay.innerText = `Clicks: ${formatNumber(player.totalClicks)}`;
+  ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
+  ui.damageDisplay.innerText = `Dano por Clique: ${formatNumber(player.damagePerClick)}`;
 
   ui.xpBar.style.width = `50%`;
-  ui.xpText.innerText = `Lv. ${player.level} (50%)`;
+  ui.xpText.innerText = `Nv. ${player.level} (50%)`;
 
   ui.targetObject.className = `objects ${currentTargetData.shape}`;
   ui.targetObject.style.backgroundColor = currentTargetData.color;
@@ -164,12 +161,12 @@ function spawnCoin() {
 
   // 1. Cria o elemento do Nível (Verde)
   const levelText = document.createElement('span');
-  levelText.className = 'coin-level';
-  levelText.innerText = `Lv.${target.round}`; // Usa o nível da rodada
+  levelText.className = 'coin_level';
+  levelText.innerText = `Nv.${target.round}`; // Usa o nível da rodada
 
   // 2. Cria o elemento do Valor (Amarelo com +)
   const valueText = document.createElement('span');
-  valueText.className = 'coin-value';
+  valueText.className = 'coin_value';
   // Use Math.floor para garantir que seja um número inteiro simples
   valueText.innerText = `${Math.floor(coinValue)}c`;
 
@@ -216,13 +213,13 @@ function spawnCoin() {
   coin.addEventListener('click', () => {
     // 1. Atualiza o saldo do jogador (Mantenha sua lógica atual)
     player.coins += coinValue;
-    ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
+    ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
 
     // --- NOVA LÓGICA DE ANIMAÇÃO ---
 
     // 2. Cria o elemento de texto flutuante temporário
     const floatingScore = document.createElement('div');
-    floatingScore.className = 'floating-score';
+    floatingScore.className = 'floating_score';
     floatingScore.innerText = `+${formatNumber(coinValue)}`; // Copia o valor
 
     // 3. Posiciona o texto flutuante EXATAMENTE onde a moeda estava
