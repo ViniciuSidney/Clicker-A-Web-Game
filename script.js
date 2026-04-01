@@ -9,21 +9,21 @@ const player = {
 
 // --- NOVA LISTA DE ALVOS ---
 const targetList = [
-  {
+  { // Alvo 1: Fácil 
     name: "Círculo Dourado",
     color: "gold",
     shape: "shape-circle",
     baseHealth: 10,
     rewardMultiplier: 1,
   },
-  {
+  { // Alvo 2: Médio
     name: "Quadrado Carmesim",
     color: "crimson",
     shape: "shape-square",
     baseHealth: 30,
     rewardMultiplier: 2,
   },
-  {
+  { // Alvo 3: Difícil
     name: "Triângulo Esmeralda",
     color: "mediumseagreen",
     shape: "shape-triangle",
@@ -46,28 +46,28 @@ const coinConfig = {
   safetyMargin: 10,
   despawnTime: 10000,
   types: [
-    {
+    { // Raridade: Comum
       name: "Bronze",
       chance: 0.7,
       multiplier: 1,
       color: "#cd7f32",
       border: "#8b4513",
     },
-    {
+    { // Raridade: Incomum
       name: "Silver",
       chance: 0.25,
       multiplier: 3,
       color: "#c0c0c0",
       border: "#808080",
     },
-    {
+    { // Raridade: Raro
       name: "Gold",
       chance: 0.04,
       multiplier: 10,
       color: "#ffd700",
       border: "#b8860b",
     },
-    {
+    { // Raridade: Lendário
       name: "Diamond",
       chance: 0.01,
       multiplier: 50,
@@ -102,10 +102,7 @@ function updateUI() {
     (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
 
   ui.healthBar.style.width = `${healthPercentage}%`;
-
-  // ATUALIZAÇÃO: Agora mostra o Nível da Rodada, não o do Player
   ui.nameDisplay.innerHTML = `${currentTargetData.name}<br>(Nível ${target.round})`;
-
   ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
   ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
   ui.damageDisplay.innerText = `Damage per Click: ${formatNumber(player.damagePerClick)}`;
@@ -116,6 +113,14 @@ function updateUI() {
 
   ui.targetObject.className = `objects ${currentTargetData.shape}`;
   ui.targetObject.style.backgroundColor = currentTargetData.color;
+
+  // --- NOVA LÓGICA DO MULTIPLICADOR AQUI ---
+  // (Rodada - 1) * (Quantidade de Alvos) + Multiplicador do Alvo Atual
+  const targetMultiplier = (
+    (target.round - 1) * targetList.length +
+    currentTargetData.rewardMultiplier
+  ).toFixed(1);
+  ui.multDisplay.innerText = `x${targetMultiplier}`;
 }
 
 updateUI();
@@ -132,8 +137,8 @@ function formatNumber(num) {
 // --- CORE GAME FUNCTIONS ---
 
 function spawnCoin() {
-  const coin = document.createElement("div");
-  coin.className = "coin";
+  const coin = document.createElement('div');
+  coin.className = 'coin';
 
   // --- LÓGICA DE SORTEIO (RARIDADE) ---
   const rand = Math.random();
@@ -151,17 +156,32 @@ function spawnCoin() {
   // Calcula o valor baseado no nível e multiplicador da raridade
   const currentTargetData = targetList[target.currentIndex];
 
-  const currentGlobalMult =
-    (target.round - 1) * 2 + currentTargetData.rewardMultiplier;
-  const coinValue = Math.floor(selectedType.multiplier * currentGlobalMult);
+  const currentTargetMult =
+    (target.round - 1) * targetList.length + currentTargetData.rewardMultiplier;
+  const coinValue = Math.floor(selectedType.multiplier * currentTargetMult);
 
   coin.dataset.value = coinValue;
 
+  // 1. Cria o elemento do Nível (Verde)
+  const levelText = document.createElement('span');
+  levelText.className = 'coin-level';
+  levelText.innerText = `Lv.${target.round}`; // Usa o nível da rodada
+
+  // 2. Cria o elemento do Valor (Amarelo com +)
+  const valueText = document.createElement('span');
+  valueText.className = 'coin-value';
+  // Use Math.floor para garantir que seja um número inteiro simples
+  valueText.innerText = `${Math.floor(coinValue)}c`;
+
+  // 3. Adiciona ambos os textos dentro da moeda
+  coin.appendChild(levelText);
+  coin.appendChild(valueText);
+
   // Define a aparência e o texto
-  coin.innerText = `+${formatNumber(coinValue)}`;
   coin.style.backgroundColor = selectedType.color;
   coin.style.borderColor = selectedType.border;
   coin.style.color = selectedType.border; // Texto da mesma cor da borda para ler melhor
+
   let x, y;
   let attempts = 0;
   let isInsideForbiddenArea = true;
@@ -193,7 +213,7 @@ function spawnCoin() {
   coin.style.top = `${y}px`;
 
   // --- COLETA ---
-  coin.addEventListener("click", () => {
+  coin.addEventListener('click', () => {
     player.coins += coinValue; // Adiciona o valor real calculado
     ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
     coin.remove();
@@ -210,8 +230,6 @@ function handleTargetClick() {
   player.totalClicks++;
 
   if (Math.floor(target.currentHealth) <= 0) {
-    const currentTargetData = targetList[target.currentIndex];
-
     // 1. Spawna as moedas com um bônus extra baseado na dificuldade do alvo!
     const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
     for (let i = 0; i < bonusQuantity; i++) {
@@ -222,8 +240,6 @@ function handleTargetClick() {
 
     // 2. Avança para o próximo alvo
     target.currentIndex++;
-
-
 
     // Se passamos do último da lista, voltamos pro primeiro e aumentamos a Rodada (Round)
     if (target.currentIndex >= targetList.length) {
@@ -242,13 +258,6 @@ function handleTargetClick() {
 
     // Atualiza o dano do jogador
     player.damagePerClick = target.baseDamageFormula(player.level);
-
-        // CÁLCULO DO MULTIPLICADOR GLOBAL: Alvo * Rodada
-    const globalMultiplier = (
-        (target.round - 1) * 2 +
-        nextTargetData.rewardMultiplier
-    ).toFixed(1);
-    ui.multDisplay.innerText = `x${globalMultiplier}`;
   }
 
   updateUI();

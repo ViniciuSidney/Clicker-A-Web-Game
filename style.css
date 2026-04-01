@@ -136,13 +136,26 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     font-weight: bold;
     font-size: 0.8rem; /* Diminuir um pouco para caber o texto +5 */
     user-select: none;
     z-index: 5;
     border: 3px solid; /* Deixe apenas a borda, a cor virá do JS */
     animation: coinLifeCycle 10s linear forwards; 
+}
 
+/* Novo: Estilo do texto do Nível (Verde) */
+.coin-level {
+    font-size: 0.65rem;  /* Um pouco menor, no topo */
+    font-weight: bold;
+}
+
+/* Novo: Estilo do texto do Valor (Amarelo com +) */
+.coin-value {
+    font-size: 0.75rem; /* Um pouco maior, embaixo */
+    font-weight: bold;
+    margin-top: -2px;   /* Ajuste fino para aproximar os números */
 }
 
 @keyframes coinLifeCycle {
