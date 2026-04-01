@@ -212,11 +212,35 @@ function spawnCoin() {
   coin.style.left = `${x}px`;
   coin.style.top = `${y}px`;
 
-  // --- COLETA ---
+  // --- COLETA (COM ANIMAÇÃO) ---
   coin.addEventListener('click', () => {
-    player.coins += coinValue; // Adiciona o valor real calculado
+    // 1. Atualiza o saldo do jogador (Mantenha sua lógica atual)
+    player.coins += coinValue;
     ui.coinsDisplay.innerText = `Coins: ${formatNumber(player.coins)}`;
+
+    // --- NOVA LÓGICA DE ANIMAÇÃO ---
+
+    // 2. Cria o elemento de texto flutuante temporário
+    const floatingScore = document.createElement('div');
+    floatingScore.className = 'floating-score';
+    floatingScore.innerText = `+${formatNumber(coinValue)}`; // Copia o valor
+
+    // 3. Posiciona o texto flutuante EXATAMENTE onde a moeda estava
+    // Usamos as mesmas posições left/top que calculamos para a moeda
+    floatingScore.style.left = coin.style.left;
+    floatingScore.style.top = coin.style.top;
+
+    // 4. Adiciona o texto flutuante na playarea para a animação começar
+    ui.playField.appendChild(floatingScore);
+
+    // 5. Remove a moeda original IMEDIATAMENTE.
+    // O texto flutuante dá o feedback visual.
     coin.remove();
+
+    // 6. Configura a remoção do texto flutuante após a animação (0.5s)
+    setTimeout(() => {
+      if (floatingScore) floatingScore.remove();
+    }, 500); // 500ms é a duração da animação no CSS
   });
 
   setTimeout(() => {

@@ -55,7 +55,6 @@ main {
     background: #333;
     gap: 10px;              /* Espaço entre os contadores e a barra */
     font-size: 1rem;
-    z-index: 10;
 }
 
 .hud-top {
@@ -164,6 +163,32 @@ main {
     8% { transform: scale(1); opacity: 1; }
     80% { transform: scale(1); opacity: 1; filter: brightness(1); }
     100% { transform: scale(0.2); opacity: 0; filter: brightness(2); } /* Fica pequena e brilha antes de sumir */
+}
+
+/* --- ANIMAÇÃO DE FLUTUAR E SUMIR (FLOATING SCORE) --- */
+@keyframes floatUpAndFade {
+    0% {
+        transform: translateY(0); /* Posição inicial */
+        opacity: 1;               /* Totalmente visível */
+    }
+    100% {
+        transform: translateY(-50px); /* Flutua 50px para cima */
+        opacity: 0;                   /* Fica totalmente invisível */
+    }
+}
+
+/* Novo: Classe para o texto flutuante */
+.floating-score {
+    position: absolute;      /* Essencial para sobrepor a moeda */
+    font-size: 0.8rem;       /* Tamanho para ser visível */
+    color: #ffd700;          /* Cor amarela idêntica ao valor da moeda */
+    font-weight: bold;
+    font-family: monospace;   /* Mantém a consistência da fonte */
+    pointer-events: none;     /* Garante que o clique não "atrapalhe" a animação */
+    z-index: 100;            /* Fica acima de tudo na playarea */
+    
+    /* Aplica a animação: 0.5s, animação linear, e para no final */
+    animation: floatUpAndFade 0.5s linear forwards; 
 }
 
 #stage_multiplier {
