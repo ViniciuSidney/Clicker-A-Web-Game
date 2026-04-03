@@ -409,5 +409,5 @@ ui.targetObject.addEventListener("click", (e) => {
 
   // Passamos o X e Y para a função
   // Sugestão: 150ms de delay é muito para um clicker, reduzi para 10ms
-  setTimeout(() => handleTargetClick(x, y), 10); 
+  setTimeout(() => handleTargetClick(x, y), 150); 
 });
