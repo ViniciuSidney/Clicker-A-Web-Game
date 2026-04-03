@@ -11,27 +11,51 @@ const player = {
 const targetList = [
   {
     // Alvo 1: Fácil
-    name: "Círculo Dourado",
-    color: "gold",
-    shape: "shape-circle",
+    name: 'Círculo Dourado',
+    color: 'gold',
+    shape: 'shape-circle',
     baseHealth: 10,
     rewardMultiplier: 1,
   },
   {
     // Alvo 2: Médio
-    name: "Quadrado Carmesim",
-    color: "crimson",
-    shape: "shape-square",
+    name: 'Quadrado Carmesim',
+    color: 'crimson',
+    shape: 'shape-square',
     baseHealth: 30,
     rewardMultiplier: 2,
   },
   {
     // Alvo 3: Difícil
-    name: "Triângulo Esmeralda",
-    color: "mediumseagreen",
-    shape: "shape-triangle",
+    name: 'Triângulo Esmeralda',
+    color: 'mediumseagreen',
+    shape: 'shape-triangle',
     baseHealth: 80,
     rewardMultiplier: 3,
+  },
+  {
+    // Alvo 4: Muito Difícil
+    name: 'Losango de Ametista',
+    color: '#9b59b6',
+    shape: 'shape-diamond',
+    baseHealth: 200,
+    rewardMultiplier: 4,
+  },
+  {
+    // Alvo 5: Extremamente Difícil
+    name: 'Pentágono de Ferro',
+    color: '#7f8c8d',
+    shape: 'shape-pentagon',
+    baseHealth: 800,
+    rewardMultiplier: 5,
+  },
+  {
+    // Alvo 6: Desafio Supremo
+    name: 'Hexágono de Obsidiana',
+    color: '#2c3e50',
+    shape: 'shape-hexagon',
+    baseHealth: 3500,
+    rewardMultiplier: 6,
   },
 ];
 
@@ -40,6 +64,7 @@ const target = {
   round: 1, // Quantas vezes já completamos a lista inteira
   maxHealth: 10,
   currentHealth: 10,
+  isTransitioning: false,
   baseDamageFormula: (level) => 5 * Math.pow(1.2, level),
 };
 
@@ -284,6 +309,9 @@ function spawnCoin() {
 }
 
 function handleTargetClick(clickX, clickY) {
+
+  if (target.isTransitioning) return;
+
   // --- Precisamos dos dados do alvo *atual* (o que vai levar dano/morrer) ---
   const currentTargetData = targetList[target.currentIndex]; // Salvamos antes de mudar nada
 
@@ -316,6 +344,8 @@ function handleTargetClick(clickX, clickY) {
 
   // --- VERIFICA DERROTA ---
   if (Math.floor(target.currentHealth) <= 0) {
+    target.isTransitioning = true;
+
     // 1. Spawna moedas normal
     const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
     for (let i = 0; i < bonusQuantity; i++) {
@@ -357,7 +387,7 @@ function handleTargetClick(clickX, clickY) {
         ui.playField.appendChild(fragment);
 
         // Limpeza após a animação (0.8s)
-        setTimeout(() => { if (fragment) fragment.remove(); }, 1100);
+        setTimeout(() => { if (fragment) fragment.remove(); }, 800);
     }
 
     // --- LÓGICA DE PROGRESSÃO (Movemos para um setTimeout pequeno para deixar a quebra acontecer) ---
@@ -389,6 +419,8 @@ function handleTargetClick(clickX, clickY) {
 
         // Mostramos o objeto real novamente (carregando o NOVO alvo)
         ui.targetObject.style.opacity = "1";
+
+        target.isTransitioning = false;
     }, 150); // A quebra começa e 150ms depois o novo alvo aparece suavemente
 
   } else {
@@ -409,5 +441,5 @@ ui.targetObject.addEventListener("click", (e) => {
 
   // Passamos o X e Y para a função
   // Sugestão: 150ms de delay é muito para um clicker, reduzi para 10ms
-  setTimeout(() => handleTargetClick(x, y), 150); 
+  handleTargetClick(x, y); 
 });
