@@ -1,4 +1,4 @@
-# Ideias para o Projeto Clicker Game
+# Ideias para o Projeto Clicker Game A
 
 Este documento serve como um brainstorm para coletar todas as ideias e melhorias que quero implementar no jogo. Organize as ideias por categoria para facilitar a visualização e priorização.
 
@@ -10,20 +10,22 @@ Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cli
 - **Ideia 3:** ...
 
 ### Subseções Possíveis:
-- Novos Tipos de Alvos
+- Tipos de Alvos
 - Sistema de Upgrades
 - Modos de Jogo (ex: survival, endless)
 - Eventos Especiais
 
-### Tipos de Alvos
+#### Tipos de Alvos
 
-- Círculo Dourado
-- Quadrado Carmesim
-- Triângulo Esmeralda
-- Losango de Ametista
-- Pentágono de Ferro
-- Hexágono de Obsidiana
-- Estrela (Chefe)
+- Círculo Dourado (Add)
+- Quadrado Carmesim (Add)
+- Triângulo Esmeralda (Add)
+- Losango de Ametista (Add)
+- Pentágono de Ferro (Add)
+- Hexágono de Obsidiana (Add)
+- Estrela [Chefe] (Falta Add)
+
+#### Sistema de Upgrades
 
 ## 2. UI/UX Melhorias
 Ideias para melhorar a interface do usuário, design visual, responsividade, etc.
