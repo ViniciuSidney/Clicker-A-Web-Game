@@ -9,7 +9,7 @@ html {
   padding: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden; /* Adeus, barra de rolagem! */
+  overflow: hidden;
   background-color: #000000;
 }
 
@@ -17,7 +17,7 @@ html {
 main {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 40px); /* 100% da tela menos a altura do seu footer */
+  height: calc(100vh - 40px);
 }
 
 #game {
@@ -31,7 +31,7 @@ main {
 .header {
   text-align: center;
   background: #333;
-  z-index: 10; /* Garante que o header fique acima de outros elementos */
+  z-index: 10;
 }
 
 #game_title {
@@ -49,11 +49,11 @@ main {
 /* Ajuste do HUD para ser uma coluna */
 .hud {
   display: flex;
-  flex-direction: column; /* Empilha linha de cima e linha de baixo */
-  align-items: center; /* Centraliza tudo horizontalmente */
-  padding: 0 0 15px 0; /* Dá um respiro interno */
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 15px 0;
   background: #333;
-  gap: 10px; /* Espaço entre os contadores e a barra */
+  gap: 10px;
   font-size: 1rem;
 }
 
@@ -73,16 +73,15 @@ main {
 }
 
 #coin_c {
-  background-color: #c0a012; /* Verde para dinheiro */
+  background-color: #c0a012;
   color: #fff1c4;
 }
 
 #damage_c {
-  background-color: #d65454; /* Vermelho para dano */
+  background-color: #d65454;
   color: #ffcbcb;
 }
 
-/* --- NOVA BARRA DE XP NO HUD --- */
 .player_xp_container {
   width: 250px;
   height: 15px;
@@ -101,26 +100,25 @@ main {
   top: 0;
   height: 100%;
   background: #5bb992;
-  width: 0%; /* Começa em 0 */
+  width: 0%;
   transition: width 0.3s ease;
 }
 
 .player_xp_text {
-  position: relative; /* Fica acima do preenchimento */
+  position: relative;
   font-size: 0.65rem;
   color: white;
   font-weight: bold;
   text-shadow: 1px 1px 2px rgb(0, 42, 21);
 }
 
-/* --- PROGRESSION TRACKER INTEGRADO --- */
 #progression_container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 0 10px 0; /* Espaçamento para não grudar no topo */
-  background: transparent; /* Remove o fundo para integrar à play area */
-  border: none; /* Remove bordas antigas */
+  padding: 10px 0 10px 0;
+  background: transparent;
+  border: none;
   z-index: 10;
   pointer-events: none;
 }
@@ -137,7 +135,6 @@ main {
   gap: 10px;
 }
 
-/* Estilo dos anéis conforme a imagem v0.2.5 */
 .prog-circle {
   width: 12px;
   height: 12px;
@@ -148,19 +145,17 @@ main {
 
 .prog-defeated {
   border-color: #2ecc71;
-} /* Verde */
+}
 .prog-upcoming {
   border-color: #e74c3c;
-} /* Vermelho/Coral */
+}
 
-/* Círculo atual com brilho (Glow) */
 .prog-current {
-  border-color: #f1c40f; /* Amarelo */
+  border-color: #f1c40f;
   box-shadow: 0 0 10px #f1c40f;
 }
 
 #stage_multiplier {
-  /* Removido position: absolute, top, left e transform */
   padding: 3px 15px;
   color: #ffd700;
   font-size: 0.9rem;
@@ -177,9 +172,9 @@ main {
 #play_field {
   flex: 1;
   display: flex;
-  flex-direction: column; /* FORÇA UM EM CIMA DO OUTRO */
-  justify-content: flex-start; /* COMEÇA DO TOPO */
-  align-items: center; /* CENTRALIZA TUDO HORIZONTALMENTE */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   overflow: hidden;
   background: #222222;
   cursor: crosshair;
@@ -197,24 +192,22 @@ main {
   justify-content: center;
   flex-direction: column;
   font-weight: bold;
-  font-size: 0.8rem; /* Diminuir um pouco para caber o texto +5 */
+  font-size: 0.8rem;
   user-select: none;
   z-index: 5;
-  border: 3px solid; /* Deixe apenas a borda, a cor virá do JS */
+  border: 3px solid;
   animation: coinLifeCycle 10s linear forwards;
 }
 
-/* Novo: Estilo do texto do Nível (Verde) */
 .coin_level {
-  font-size: 0.65rem; /* Um pouco menor, no topo */
+  font-size: 0.65rem;
   font-weight: bold;
 }
 
-/* Novo: Estilo do texto do Valor (Amarelo com +) */
 .coin_value {
-  font-size: 0.75rem; /* Um pouco maior, embaixo */
+  font-size: 0.75rem;
   font-weight: bold;
-  margin-top: -2px; /* Ajuste fino para aproximar os números */
+  margin-top: -2px;
 }
 
 @keyframes coinLifeCycle {
@@ -239,39 +232,34 @@ main {
     transform: scale(0.2);
     opacity: 0;
     filter: brightness(2);
-  } /* Fica pequena e brilha antes de sumir */
+  }
 }
 
-/* --- ANIMAÇÃO DE FLUTUAR E SUMIR (FLOATING SCORE) --- */
 @keyframes floatUpAndFade {
   0% {
-    transform: translateY(0); /* Posição inicial */
-    opacity: 1; /* Totalmente visível */
+    transform: translateY(0);
+    opacity: 1;
   }
   100% {
-    transform: translateY(-50px); /* Flutua 50px para cima */
-    opacity: 0; /* Fica totalmente invisível */
+    transform: translateY(-50px);
+    opacity: 0;
   }
 }
 
-/* Novo: Classe para o texto flutuante */
 .floating_score {
   position: absolute; /* Essencial para sobrepor a moeda */
   font-size: 0.8rem; /* Tamanho para ser visível */
-  color: #ffd700; /* Cor amarela idêntica ao valor da moeda */
+  color: #ffd700;
   font-weight: bold;
-  font-family: monospace; /* Mantém a consistência da fonte */
-  pointer-events: none; /* Garante que o clique não "atrapalhe" a animação */
-  z-index: 100; /* Fica acima de tudo na playarea */
+  font-family: monospace;
+  pointer-events: none;
+  z-index: 100;
 
-  /* Aplica a animação: 0.5s, animação linear, e para no final */
   animation: floatUpAndFade 0.5s linear forwards;
 }
 
-/* --- ESTILOS DO ANUNCIADOR DE RODADA --- */
 #round_announcement {
   position: absolute;
-  /* Centralizado horizontalmente e posicionado na área verde que você desenhou */
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
@@ -281,29 +269,26 @@ main {
   color: #ffd700; /* Dourado */
   text-shadow:
     0 0 10px #ff8c00,
-    0 0 20px #ff8c00; /* Brilho laranja/dourado */
+    0 0 20px #ff8c00;
   text-align: center;
 
-  /* Muito importante: ignora cliques para não bloquear o mouse do jogador */
   pointer-events: none;
   z-index: 100;
-  opacity: 0; /* Escondido por padrão */
+  opacity: 0;
 }
 
-/* Estilo do Título (Rodada Concluída) */
 #round_title {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #FFD700;
-  text-shadow: 0 0 10px #FF8C00;
+  color: #ffd700;
+  text-shadow: 0 0 10px #ff8c00;
   margin-bottom: 5px;
 }
 
-/* Estilo do Alerta de Vida (Novo Texto Vermelho) */
 #round_stats_alert {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #ff4d4d; /* Vermelho vivo */
+  color: #ff4d4d;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
@@ -313,9 +298,7 @@ main {
   animation: popAndFade 3s ease-out forwards;
 }
 
-/* A coreografia da animação */
 @keyframes popAndFade {
-  /* 0% a 15%: Aparece rápido crescendo e subindo levemente */
   0% {
     opacity: 0;
     transform: translate(-50%, 20px) scale(0.5);
@@ -325,18 +308,15 @@ main {
     transform: translate(-50%, 0) scale(1.1);
   }
 
-  /* 15% a 30%: Assenta no tamanho normal */
   30% {
     transform: translate(-50%, 0) scale(1);
   }
 
-  /* 30% a 70%: Fica parado para o jogador ler */
   70% {
     opacity: 1;
     transform: translate(-50%, 0) scale(1);
   }
 
-  /* 70% a 100%: Começa a subir lentamente e some */
   100% {
     opacity: 0;
     transform: translate(-50%, -40px) scale(0.9);
@@ -344,7 +324,7 @@ main {
 }
 
 .target_wrapper {
-  margin: auto; /* MÁGICA: Empurra o elemento para o centro do espaço disponível no play_field! */
+  margin: auto;
 
   display: flex;
   flex-direction: column;
@@ -352,15 +332,9 @@ main {
   justify-content: center;
   gap: 15px;
 
-  /* width: 20%; <-- Mude para um tamanho fixo em pixels para ter mais controle */
   width: 250px;
-  padding: 20px; /* Dá um respiro para o alvo e a barra não colarem na borda */
+  padding: 20px;
   z-index: 100;
-
-  /* Mantive suas cores de teste para você visualizar a área proibida
-    border: 3px solid red;
-    background-color: #d8857c;
-    border-radius: 10px; Deixei levemente arredondado para ficar mais bonito */
 }
 
 #object {
@@ -371,50 +345,44 @@ main {
   position: relative;
   transition:
     background-color 0.3s ease,
-    border-radius 0.3s ease; /* Transição suave ao trocar de alvo */
+    border-radius 0.3s ease;
 }
 
-/* --- PARTÍCULAS DE BRILHO DO ALVO --- */
 @keyframes particleExplosion {
   0% {
-    transform: translate(0, 0) scale(1) rotate(0deg); /* Posição inicial */
-    opacity: 1; /* Totalmente visível */
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
   }
   100% {
-    /* Flutua para cima e para os lados de forma aleatória e desaparece */
-    /* Usaremos variáveis CSS para as posições aleatórias */
     transform: translate(var(--rand-x), var(--rand-y)) scale(0.2)
       rotate(var(--rand-rotate));
-    opacity: 0; /* Fica totalmente invisível */
+    opacity: 0;
   }
 }
 
-/* Nova: Classe para a partícula de brilho */
 .target-particle {
-  position: absolute; /* Essencial para sobrepor o alvo */
-  width: 8px; /* Pequenas bolinhas */
+  position: absolute;
+  width: 8px;
   height: 8px;
-  border-radius: 50%; /* Círculo */
-  background-color: #ffffff; /* Cor amarela idêntica ao brilho do alvo */
-  box-shadow: 0 0 10px #a6a6a6; /* Um leve glow para o brilho */
-  pointer-events: none; /* Garante que o clique não "atrapalhe" a partícula */
-  z-index: 1000; /* Fica acima de tudo na playarea */
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px #a6a6a6;
+  pointer-events: none;
+  z-index: 1000;
 
   animation: particleExplosion 1.1s ease-out forwards;
 }
 
-/* Nossas Novas Formas Geométricas */
 .shape-circle {
   border-radius: 50%;
 }
 
 .shape-square {
-  border-radius: 15%; /* Cantos levemente arredondados para ficar bonito */
+  border-radius: 15%;
 }
 
 .shape-triangle {
   border-radius: 0%;
-  /* O clip-path corta o quadrado original no formato de um triângulo! */
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
@@ -427,41 +395,33 @@ main {
 }
 
 .shape-hexagon {
-  /* Hexágono Proporcional (Flat-topped) */
   clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0% 50%);
 }
 
-/* --- ANIMAÇÃO DE QUEBRA (ESTILHAÇO) --- */
 @keyframes fragmentShatter {
   0% {
-    transform: translate(0, 0) rotate(0deg) scale(0.3); /* Posição inicial centralizada */
-    opacity: 0.8; /* Totalmente visível */
+    transform: translate(0, 0) rotate(0deg) scale(0.3);
+    opacity: 0.8;
   }
   100% {
-    /* Flutua para fora usando variáveis CSS aleatórias geradas pelo JS */
     transform: translate(var(--frag-tx), var(--frag-ty)) rotate(var(--frag-rot))
       scale(0.1);
-    opacity: 0; /* Desaparece */
+    opacity: 0;
   }
 }
 
-/* Classe dos Cacos (Estilhaços) */
 .shatter-fragment {
   position: absolute;
-  z-index: 50; /* Acima do alvo, abaixo da HUD se houver sobreposição */
-  pointer-events: none; /* Não atrapalha cliques enquanto está quebrando */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Uma borda leve para separar os cacos se forem quadrados */
+  z-index: 50;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 
-  /* Aplica a animação: 0.8s, suave no final, para no final */
   animation: fragmentShatter 0.7s ease-out forwards;
 }
 
-/* Ajustes necessários nas formas geométricas para os cacos */
-/* Os cacos herdam a forma (.shape-circle etc) do alvo real via JS */
-
 .shatter-fragment.shape-triangle {
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  border: none; /* Clip-path corta bordas padrão, então removemos a borda leve */
+  border: none;
 }
 
 .shatter-fragment.shape-diamond {
@@ -479,9 +439,6 @@ main {
   border: none;
 }
 
-/* Quadrados e Círculos já funcionam com a classe shatter-fragment padrão */
-
-/* Estilo do Nome */
 .object_name {
   margin: 0 auto;
   color: white;
@@ -489,39 +446,36 @@ main {
   text-align: center;
 }
 
-/* O contêiner pai da barra de vida */
 .health_bar_wrapper {
-    position: relative; /* Permite que o texto se posicione em relação a ele */
-    width: 300px;       /* Ajuste para o tamanho que você já usa */
-    height: 20px;       /* Altura da sua barra */
-    background-color: #442222; /* Cor de fundo (barra vazia) */
-    border-radius: 12px;
-    overflow: hidden;   /* Garante que o preenchimento não saia das bordas */
-    margin: 10px auto;  /* Centraliza na tela */
+  position: relative;
+  width: 300px;
+  height: 20px;
+  background-color: #442222;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 10px auto;
 }
 
-/* O preenchimento vermelho (você já deve ter algo assim) */
 #health_fill {
-    height: 100%;
-    background-color: #e74c3c; /* Vermelho que você usa na imagem */
-    transition: width 0.2s ease; /* Deixa a barra descendo suavemente */
+  height: 100%;
+  background-color: #e74c3c;
+  transition: width 0.2s ease;
 }
 
-/* O texto com os números */
 .object_counters {
-    position: absolute; /* Fixa o texto sobre a barra */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Centralização perfeita horizontal e vertical */
-    
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-weight: 300;
-    font-size: 0.8rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); /* Sombra para ler bem sobre o vermelho */
-    pointer-events: none; /* Garante que o clique passe pelo texto e vá para o alvo */
-    z-index: 2; /* Fica acima do preenchimento */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-weight: 300;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 2;
 }
 
 footer {
