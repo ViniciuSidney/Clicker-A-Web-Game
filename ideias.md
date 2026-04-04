@@ -27,42 +27,67 @@ Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cli
 
 - **Upgrades de Clique**:
    - Upgrade 1 [Inicial] [por_nível]:
-      - Aumenta o dano base por clique.
-      - DanoTotal = DanoBase + [ (NívelUpgrade * Multiplicador) * (Upgrade 4) ]
+      - Base: 50 moedas
+      - Incremento: +2 de Dano Base por nível.
+      - Lógica: DanoTotal = DanoBase + [ (NívelUpgrade * 2) * (Upgrade 4) ]
    - Upgrade 2 [Inicial] [por_nível]:
-      - Aumenta em 5% a chance de causar 2x mais dano (Inicialmente: 0%)
+      - Base: 150 moedas
+      - Incremento: +5% de chance de Crítico por nível.
 
    - Upgrade 3 [Desbloqueável] [por_nível]:
-      - Aumenta a % da chance de causar 2x mais dano em +1%
+      - Base: 1.000 moedas
+      - Incremento: +1% de chance de Crítico por nível.
    - Upgrade 4 [Desbloqueável] [por_nível]:
-      - Aumenta a potencia do multiplicador de dano em +1x
+      - Base: 2.500 moedas
+      - Incremento: +1x na potência do multiplicador.
    - Upgrade 5 [Desbloqueável] [por_nível]:
-      - Aumenta a potencia do aumento de dano base em +1x (Inicialmente: 1x)
+      - Base: 5.000 moedas
+      - Incremento: +1x na potência do aumento base.
 
 - **Upgrades Passivos**:
    - Upgrade 1 [Inicial] [por_nível]:
-      - Dano passivo de 10% do dano ativo a cada 5 segundos
+      - Base: 100 moedas
+      - Incremento: Ativa o dano de 30% a cada 5s.
    - Upgrade 2 [Inicial] [por_nível]:
-      - Chance de 10% de Coleta de 1 moeda de forma automática
+      - Base: 300 moedas
+      - Incremento: Chance inicial de 10% de coleta automática.
 
    - Upgrade 3 [Desbloqueável] [por_nível]:
-      - Aumentar % do dano passivo em 2%
+      - Base: 1.500 moedas
+      - Incremento: +2% de dano passivo por nível.
    - Upgrade 4 [Desbloqueável] [por_nível]:
-      - Diminuir espera até o próximo ataque passivo em 0.1 segundos
+      - Base: 4.000 moedas
+      - Incremento: -0.1s de espera por nível.
+      - Limite: Mínimo de 0.2s.
    - Upgrade 5 [Desbloqueável] [por_nível]:
-      - Aumentar chance de coleta automática em 2%
+      - Base: 2.000 moedas
+      - Incremento: +2% de chance de coleta por nível.
    - Upgrade 6 [Desbloqueável] [por_nível]:
-      - Aumentar quantidade de moedas coletadas em +1
+      - Base: 7.500 moedas
+      - Incremento: +1 moeda coletada automaticamente por nível.
 
 - **Upgrades Econômicos**:
    - Upgrade 1 [Inicial] [por_nível]:
-      - Aumenta em 1% a chance de aparecer moedas de raridade maior (Inicialmente: 0%)
-      - Diminuindo as chances de moedas de raridade menor
+      - Base: 400 moedas
+      - Incremento: +1% de chance de raridade alta (reduz Bronze).
    - Upgrade 2 [Inicial] [por_nível]:
-      - Aumenta o valor base de cada moeda em +1
-
+      - Base: 600 moedas
+      - Incremento: +1 no valor base de todas as moedas.
    - Upgrade 3 [Desbloqueável] [por_nível]:
-      - Aumenta o aumento do valor base de cada moeda em +1   
+      - Base: 10.000 moedas
+      - Incremento: +1 no adicional do Upgrade 2 por nível.
+
+- **Upgrades De Alvos**:
+   - Upgrade 1 [Inicial] [por_nível]:
+      - Base: 800 moedas
+      - Incremento: -5% de Vida Base dos alvos por nível.
+      - Limite: Máximo de 95% de redução.
+   - Upgrade 2 [Inicial] [por_nível]:
+      - Base: 1.200 moedas
+      - Incremento: +1 moeda solta ao derrotar o alvo.
+   - Upgrade 3 [Desbloqueável] [por_nível]:
+      - Base: 3.500 moedas
+      - Incremento: -5% na "resistência" (o alvo recebe mais dano) por nível.
 
 ## 2. UI/UX Melhorias
 Ideias para melhorar a interface do usuário, design visual, responsividade, etc.
