@@ -310,7 +310,7 @@ main {
 }
 
 .animate-round-text {
-  animation: popAndFade 2.5s ease-out forwards;
+  animation: popAndFade 3s ease-out forwards;
 }
 
 /* A coreografia da animação */
@@ -489,27 +489,39 @@ main {
   text-align: center;
 }
 
-/* Estilo do Container da Barra (A borda/fundo da barra) */
-.health_bar_container {
-  width: 150px;
-  height: 12px;
-  background-color: #522828; /* Cor de fundo "vazia" */
-  /* border: 2px solid #3d1c1c; */
-  border-radius: 7px;
-  overflow: hidden; /* Garante que o preenchimento não vaze */
+/* O contêiner pai da barra de vida */
+.health_bar_wrapper {
+    position: relative; /* Permite que o texto se posicione em relação a ele */
+    width: 300px;       /* Ajuste para o tamanho que você já usa */
+    height: 20px;       /* Altura da sua barra */
+    background-color: #442222; /* Cor de fundo (barra vazia) */
+    border-radius: 12px;
+    overflow: hidden;   /* Garante que o preenchimento não saia das bordas */
+    margin: 10px auto;  /* Centraliza na tela */
 }
 
-/* Estilo do Preenchimento (A parte colorida da vida) */
-.health_bar_fill {
-  height: 100%;
-  background-color: #d65454; /* Cor vermelha de vida */
-  transition: width 0.15s ease-out; /* Animação suave quando a vida muda */
+/* O preenchimento vermelho (você já deve ter algo assim) */
+#health_fill {
+    height: 100%;
+    background-color: #e74c3c; /* Vermelho que você usa na imagem */
+    transition: width 0.2s ease; /* Deixa a barra descendo suavemente */
 }
 
-#health_text {
-  margin: 0;
-  color: white;
-  font-size: 0.9rem;
+/* O texto com os números */
+.object_counters {
+    position: absolute; /* Fixa o texto sobre a barra */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centralização perfeita horizontal e vertical */
+    
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-weight: 300;
+    font-size: 0.8rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); /* Sombra para ler bem sobre o vermelho */
+    pointer-events: none; /* Garante que o clique passe pelo texto e vá para o alvo */
+    z-index: 2; /* Fica acima do preenchimento */
 }
 
 footer {

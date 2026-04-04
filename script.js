@@ -22,7 +22,7 @@ const targetList = [
     name: 'Quadrado Carmesim',
     color: 'crimson',
     shape: 'shape-square',
-    baseHealth: 30,
+    baseHealth: 50,
     rewardMultiplier: 2,
   },
   {
@@ -30,7 +30,7 @@ const targetList = [
     name: 'Triângulo Esmeralda',
     color: 'mediumseagreen',
     shape: 'shape-triangle',
-    baseHealth: 80,
+    baseHealth: 100,
     rewardMultiplier: 3,
   },
   {
@@ -38,7 +38,7 @@ const targetList = [
     name: 'Losango de Ametista',
     color: '#9b59b6',
     shape: 'shape-diamond',
-    baseHealth: 180,
+    baseHealth: 250,
     rewardMultiplier: 4,
   },
   {
@@ -46,7 +46,7 @@ const targetList = [
     name: 'Pentágono de Ferro',
     color: '#7f8c8d',
     shape: 'shape-pentagon',
-    baseHealth: 450,
+    baseHealth: 500,
     rewardMultiplier: 5,
   },
   {
@@ -54,7 +54,7 @@ const targetList = [
     name: 'Hexágono de Obsidiana',
     color: '#2c3e50',
     shape: 'shape-hexagon',
-    baseHealth: 1000,
+    baseHealth: 800,
     rewardMultiplier: 6,
   },
 ];
@@ -123,8 +123,8 @@ const ui = {
   xpBar: document.getElementById('xp_fill'),
   xpText: document.querySelector('.player_xp_text'),
 
-  healthText: document.querySelectorAll('.object_counters')[0],
-
+  healthText: document.querySelector('.object_counters'),
+  
   roundText: document.getElementById('round_text'),
   progressionCircles: document.getElementById('progression_circles'),
 };
@@ -208,7 +208,7 @@ function showRoundAnnouncer(roundNum) {
   const nextBonus = 50; // 50% de aumento por rodada completa (25% do crescimento + 25% do bônus)
 
   title.innerText = `Rodada ${roundNum} Concluída!`;
-  alert.innerText = `⚠ Dificuldade Aumentada: Alvos +${nextBonus}% de Vida!`;
+  alert.innerText = `⚠ Mais Dificuldade: Alvos com +${nextBonus}% de Vida!`;
 
   container.classList.remove('animate-round-text');
   void container.offsetWidth;
@@ -478,6 +478,5 @@ ui.targetObject.addEventListener('click', (e) => {
   const y = e.clientY;
 
   // Passamos o X e Y para a função
-  // Sugestão: 150ms de delay é muito para um clicker, reduzi para 10ms
   handleTargetClick(x, y);
 });
