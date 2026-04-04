@@ -2,9 +2,13 @@
 
 const player = {
   level: 1,
+  xp: 0,
+  xpNextLevel: 100, // XP necessário para o Nv. 2
   coins: 0,
-  damagePerClick: 5,
+  damagePerClick: 10,
   totalClicks: 0,
+  // Multiplicador de dano vindo do nível (ex: +5% por nível)
+  getLevelMultiplier: () => 1 + (player.level - 1) * 0.05,
 };
 
 // --- NOVA LISTA DE ALVOS ---
@@ -124,7 +128,7 @@ const ui = {
   xpText: document.querySelector('.player_xp_text'),
 
   healthText: document.querySelector('.object_counters'),
-  
+
   roundText: document.getElementById('round_text'),
   progressionCircles: document.getElementById('progression_circles'),
 };
@@ -134,15 +138,16 @@ function updateUI() {
   const currentTargetData = targetList[target.currentIndex];
   const healthPercentage =
     (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
+  const xpPercentage = (player.xp / player.xpNextLevel) * 100;
+
+  ui.xpBar.style.width = `${xpPercentage}%`;
+  ui.xpText.innerText = `Nv. ${player.level} - ${player.xp}/${player.xpNextLevel} (${Math.floor(xpPercentage)}%)`;
 
   ui.healthBar.style.width = `${healthPercentage}%`;
   ui.nameDisplay.innerHTML = `${currentTargetData.name}<br>(Nível ${target.round})`;
   ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
   ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
   ui.damageDisplay.innerText = `Dano por Clique: ${formatNumber(player.damagePerClick)}`;
-
-  ui.xpBar.style.width = `100%`;
-  ui.xpText.innerText = `Nv. ${player.level}`;
 
   ui.targetObject.className = `objects ${currentTargetData.shape}`;
   ui.targetObject.style.backgroundColor = currentTargetData.color;
@@ -194,7 +199,7 @@ function formatNumber(num) {
   if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
   if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
   if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return (num).toFixed(1).toString();
+  return num.toFixed(1).toString();
 }
 
 // --- FUNÇÃO PARA MOSTRAR O ANÚNCIO DE RODADA ---
@@ -217,10 +222,27 @@ function showRoundAnnouncer(roundNum) {
 
 // --- CORE GAME FUNCTIONS ---
 
+function addXp(amount) {
+  player.xp += amount;
+
+  // Verifica se subiu de nível
+  if (player.xp >= player.xpNextLevel) {
+    player.xp -= player.xpNextLevel;
+    player.level++;
+
+    // Aumenta a dificuldade do próximo nível de XP (Exponencial)
+    player.xpNextLevel = Math.floor(100 * Math.pow(1.5, player.level - 1));
+
+    // Aqui você pode chamar um efeito visual de "Level Up!" futuro
+    console.log('Level Up! Novo nível: ' + player.level);
+  }
+  updateUI();
+}
+
 // --- FUNÇÃO DE BALANÇO AUTOMÁTICO ---
 function getScaledHealth(baseHealth) {
   // 0.10 (10%) + 0.15 (15%) = 0.25 (25% de aumento por rodada)
-  const totalGrowthFactor = 0.50;
+  const totalGrowthFactor = 0.5;
 
   // No Round 1, o multiplicador será 1 (vida base)
   // No Round 2, será 1.25 (10 + 12.5)
@@ -382,6 +404,9 @@ function handleTargetClick(clickX, clickY) {
   if (Math.floor(target.currentHealth) <= 0) {
     target.isTransitioning = true;
 
+    const xpGained = currentTargetData.rewardMultiplier * 10 * target.round;
+    addXp(xpGained);
+
     // 1. Spawna moedas normal
     const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
     for (let i = 0; i < bonusQuantity; i++) {
@@ -430,7 +455,6 @@ function handleTargetClick(clickX, clickY) {
 
     // --- LÓGICA DE PROGRESSÃO (Movemos para um setTimeout pequeno para deixar a quebra acontecer) ---
     setTimeout(() => {
-      player.level++;
 
       // Avança index...
       target.currentIndex++;
@@ -451,7 +475,7 @@ function handleTargetClick(clickX, clickY) {
       target.currentHealth = target.maxHealth;
 
       // Atualiza o dano do jogador
-      player.damagePerClick = target.baseDamageFormula(player.level);
+      player.damagePerClick += target.baseDamageFormula(player.level);
 
       // Atualiza a HUD e troca o alvo real (que ainda está invisível)
       updateUI();
