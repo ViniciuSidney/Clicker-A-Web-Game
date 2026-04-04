@@ -5,8 +5,8 @@ Este documento serve como um brainstorm para coletar todas as ideias e melhorias
 ## 1. Mecânicas de Jogo
 Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cliques, upgrades, inimigos, etc.
 
-- **Ideia 1:** Troca de alvo ao derrotar o atual e troca para o primeiro ao derrotar o último.
-- **Ideia 2:** ...
+- **Ideia 1:** Troca de alvo ao derrotar o atual e troca para o primeiro ao derrotar o último. ✅
+- **Ideia 2:** Dano ao jogador depois de certo tempo no mesmo alvo. Ao ser derrotado, jogador volta para o alvo anterior.
 - **Ideia 3:** ...
 
 ### Subseções:
@@ -22,6 +22,19 @@ Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cli
 
 ### Sistema de Upgrades
 
+- Upgrades de Clique:
+   - Upgrade 1:
+      - Aumenta o dano base por clique.
+      - DanoTotal = DanoBase + (NívelUpgrade * Multiplicador)
+   - Upgrade 2:
+      - Adiciona uma chance (5%) de causar 2x mais dano
+
+- Upgrades Passivos:
+   - Upgrade 1:
+      - Dano Automático de 10% do dano ativo a cada 5 segundos
+   - Upgrade 2:
+      - Chance de 10% de Coleta de 1 moeda de forma automática
+
 
 ## 2. UI/UX Melhorias
 Ideias para melhorar a interface do usuário, design visual, responsividade, etc.
@@ -35,6 +48,13 @@ Ideias para melhorar a interface do usuário, design visual, responsividade, etc
 - Feedback Visual (sons, partículas)
 - Menus e Navegação
 
+### Animações e Efeitos Visuais
+
+- Ao clicar no alvo
+- Ao derrotar o alvo
+- Ao sumir moeda
+- Ao clicar na moeda
+
 ## 3. Balanceamento e Progressão
 Ajustes para tornar o jogo mais equilibrado, progressão de dificuldade, economia, etc.
 
@@ -47,6 +67,12 @@ Ajustes para tornar o jogo mais equilibrado, progressão de dificuldade, economi
 - Níveis e XP
 - Balanceamento de Poderes
 
+### Níveis e XP
+
+- Ganhar XP ao derrotar alvos
+- Ao receber XP suficiente, jogador sobe de Nível
+- Ao subir de Nível ganhar multiplicador de [...]
+
 ## 4. Novos Conteúdos
 Adições de novos elementos ao jogo, como itens, skins, mundos, etc.
 
@@ -58,6 +84,7 @@ Adições de novos elementos ao jogo, como itens, skins, mundos, etc.
 - Itens Cosméticos
 - Expansões ou DLCs
 - Personagens ou Avatares
+- Telas de Funcionalidades
 
 ### Novos Alvos:
 - Círculo Dourado ✅
@@ -67,6 +94,10 @@ Adições de novos elementos ao jogo, como itens, skins, mundos, etc.
 - Pentágono de Ferro ✅
 - Hexágono de Obsidiana ✅
 - Estrela [Chefe] 🔨
+
+### Telas de Funcionalidades
+- Sistema de Melhorias
+- Sistema de Reset
 
 ## 5. Tecnologias e Performance
 Ideias técnicas para melhorar o código, otimização, novas features técnicas.
