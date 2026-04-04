@@ -5,27 +5,23 @@ Este documento serve como um brainstorm para coletar todas as ideias e melhorias
 ## 1. Mecânicas de Jogo
 Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cliques, upgrades, inimigos, etc.
 
-- **Ideia 1:** ...
+- **Ideia 1:** Troca de alvo ao derrotar o atual e troca para o primeiro ao derrotar o último.
 - **Ideia 2:** ...
 - **Ideia 3:** ...
 
-### Subseções Possíveis:
+### Subseções:
 - Tipos de Alvos
 - Sistema de Upgrades
 - Modos de Jogo (ex: survival, endless)
 - Eventos Especiais
 
-#### Tipos de Alvos
+### Tipos de Alvos
 
-- Círculo Dourado (Add)
-- Quadrado Carmesim (Add)
-- Triângulo Esmeralda (Add)
-- Losango de Ametista (Add)
-- Pentágono de Ferro (Add)
-- Hexágono de Obsidiana (Add)
-- Estrela [Chefe] (Falta Add)
+- Alvos normais
+- Alvos chefes
 
-#### Sistema de Upgrades
+### Sistema de Upgrades
+
 
 ## 2. UI/UX Melhorias
 Ideias para melhorar a interface do usuário, design visual, responsividade, etc.
@@ -33,7 +29,7 @@ Ideias para melhorar a interface do usuário, design visual, responsividade, etc
 - **Ideia 1:** ...
 - **Ideia 2:** ...
 
-### Subseções Possíveis:
+### Subseções:
 - Animações e Efeitos Visuais
 - Layout Responsivo
 - Feedback Visual (sons, partículas)
@@ -45,7 +41,7 @@ Ajustes para tornar o jogo mais equilibrado, progressão de dificuldade, economi
 - **Ideia 1:** ...
 - **Ideia 2:** ...
 
-### Subseções Possíveis:
+### Subseções:
 - Curva de Dificuldade
 - Sistema de Moedas e Recompensas
 - Níveis e XP
@@ -57,11 +53,20 @@ Adições de novos elementos ao jogo, como itens, skins, mundos, etc.
 - **Ideia 1:** ...
 - **Ideia 2:** ...
 
-### Subseções Possíveis:
+### Subseções:
 - Novos Inimigos/Alvos
 - Itens Cosméticos
 - Expansões ou DLCs
 - Personagens ou Avatares
+
+### Novos Alvos:
+- Círculo Dourado ✅
+- Quadrado Carmesim ✅
+- Triângulo Esmeralda ✅
+- Losango de Ametista ✅
+- Pentágono de Ferro ✅
+- Hexágono de Obsidiana ✅
+- Estrela [Chefe] 🔨
 
 ## 5. Tecnologias e Performance
 Ideias técnicas para melhorar o código, otimização, novas features técnicas.
@@ -69,7 +74,7 @@ Ideias técnicas para melhorar o código, otimização, novas features técnicas
 - **Ideia 1:** ...
 - **Ideia 2:** ...
 
-### Subseções Possíveis:
+### Subseções:
 - Otimização de Performance
 - Integração com APIs
 - Salvamento de Progresso
