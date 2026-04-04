@@ -6,7 +6,7 @@ Este documento serve como um brainstorm para coletar todas as ideias e melhorias
 Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cliques, upgrades, inimigos, etc.
 
 - **Ideia 1:** Troca de alvo ao derrotar o atual e troca para o primeiro ao derrotar o último. ✅
-- **Ideia 2:** Dano ao jogador depois de certo tempo no mesmo alvo. Ao ser derrotado, jogador volta para o alvo anterior.
+- **Ideia 2:** Dano ao jogador depois de certo tempo no mesmo alvo. Ao ser derrotado, jogador volta para o alvo anterior. 🔨
 - **Ideia 3:** ...
 
 ### Subseções:
@@ -20,21 +20,49 @@ Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cli
 - Alvos normais
 - Alvos chefes
 
-### Sistema de Upgrades
+### Sistema de Upgrades 🔨
 
-- Upgrades de Clique:
-   - Upgrade 1:
+- **Custos dos Upgrades**
+   - CustoProximoNv = Base * 1.15^NivelAtual
+
+- **Upgrades de Clique**:
+   - Upgrade 1 [Inicial] [por_nível]:
       - Aumenta o dano base por clique.
-      - DanoTotal = DanoBase + (NívelUpgrade * Multiplicador)
-   - Upgrade 2:
-      - Adiciona uma chance (5%) de causar 2x mais dano
+      - DanoTotal = DanoBase + [ (NívelUpgrade * Multiplicador) * (Upgrade 4) ]
+   - Upgrade 2 [Inicial] [por_nível]:
+      - Aumenta em 5% a chance de causar 2x mais dano (Inicialmente: 0%)
 
-- Upgrades Passivos:
-   - Upgrade 1:
-      - Dano Automático de 10% do dano ativo a cada 5 segundos
-   - Upgrade 2:
+   - Upgrade 3 [Desbloqueável] [por_nível]:
+      - Aumenta a % da chance de causar 2x mais dano em +1%
+   - Upgrade 4 [Desbloqueável] [por_nível]:
+      - Aumenta a potencia do multiplicador de dano em +1x
+   - Upgrade 5 [Desbloqueável] [por_nível]:
+      - Aumenta a potencia do aumento de dano base em +1x (Inicialmente: 1x)
+
+- **Upgrades Passivos**:
+   - Upgrade 1 [Inicial] [por_nível]:
+      - Dano passivo de 10% do dano ativo a cada 5 segundos
+   - Upgrade 2 [Inicial] [por_nível]:
       - Chance de 10% de Coleta de 1 moeda de forma automática
 
+   - Upgrade 3 [Desbloqueável] [por_nível]:
+      - Aumentar % do dano passivo em 2%
+   - Upgrade 4 [Desbloqueável] [por_nível]:
+      - Diminuir espera até o próximo ataque passivo em 0.1 segundos
+   - Upgrade 5 [Desbloqueável] [por_nível]:
+      - Aumentar chance de coleta automática em 2%
+   - Upgrade 6 [Desbloqueável] [por_nível]:
+      - Aumentar quantidade de moedas coletadas em +1
+
+- **Upgrades Econômicos**:
+   - Upgrade 1 [Inicial] [por_nível]:
+      - Aumenta em 1% a chance de aparecer moedas de raridade maior (Inicialmente: 0%)
+      - Diminuindo as chances de moedas de raridade menor
+   - Upgrade 2 [Inicial] [por_nível]:
+      - Aumenta o valor base de cada moeda em +1
+
+   - Upgrade 3 [Desbloqueável] [por_nível]:
+      - Aumenta o aumento do valor base de cada moeda em +1   
 
 ## 2. UI/UX Melhorias
 Ideias para melhorar a interface do usuário, design visual, responsividade, etc.
