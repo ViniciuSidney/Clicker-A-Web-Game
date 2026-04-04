@@ -29,20 +29,22 @@ Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cli
    - Upgrade 1 [Inicial] [por_nível]:
       - Base: 50 moedas
       - Incremento: +2 de Dano Base por nível.
-      - Lógica: DanoTotal = DanoBase + [ (NívelUpgrade * 2) * (Upgrade 4) ]
+      - Lógica: DanoTotal = DanoBase + [ (NívelUpgrade * 2) * [Upgrade_4] ]
    - Upgrade 2 [Inicial] [por_nível]:
       - Base: 150 moedas
       - Incremento: +5% de chance de Crítico por nível.
 
    - Upgrade 3 [Desbloqueável] [por_nível]:
       - Base: 1.000 moedas
-      - Incremento: +1% de chance de Crítico por nível.
+      - Incremento: +1 no aumento de x% na chance de Crítico do [Upgrade_2].
    - Upgrade 4 [Desbloqueável] [por_nível]:
       - Base: 2.500 moedas
-      - Incremento: +1x na potência do multiplicador.
+      - Incremento: +1x na potência do multiplicador do Crítico.
+      - Inicialmente: 1x
    - Upgrade 5 [Desbloqueável] [por_nível]:
       - Base: 5.000 moedas
-      - Incremento: +1x na potência do aumento base.
+      - Incremento: +1x na potência do multiplicador do dano base.
+      - Inicialmente: 1x
 
 - **Upgrades Passivos**:
    - Upgrade 1 [Inicial] [por_nível]:
@@ -80,14 +82,15 @@ Aqui vão ideias relacionadas à jogabilidade principal, como novos tipos de cli
 - **Upgrades De Alvos**:
    - Upgrade 1 [Inicial] [por_nível]:
       - Base: 800 moedas
-      - Incremento: -5% de Vida Base dos alvos por nível.
-      - Limite: Máximo de 95% de redução.
+      - Incremento: -5% na "resistência" (o alvo recebe mais dano) por nível.
+      - Limite: Máximo de 50% de redução.
    - Upgrade 2 [Inicial] [por_nível]:
       - Base: 1.200 moedas
       - Incremento: +1 moeda solta ao derrotar o alvo.
+
    - Upgrade 3 [Desbloqueável] [por_nível]:
       - Base: 3.500 moedas
-      - Incremento: -5% na "resistência" (o alvo recebe mais dano) por nível.
+      - Incremento: 
 
 ## 2. UI/UX Melhorias
 Ideias para melhorar a interface do usuário, design visual, responsividade, etc.
