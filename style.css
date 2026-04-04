@@ -1,425 +1,523 @@
-
-*{
-    font-family: monospace;
+* {
+  font-family: monospace;
 }
 
 /* Remove margens padrão e trava o scroll */
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden; /* Adeus, barra de rolagem! */
-    background-color: #000000;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Adeus, barra de rolagem! */
+  background-color: #000000;
 }
 
 /* O Main ocupa toda a tela, exceto o espaço do footer */
 main {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 40px); /* 100% da tela menos a altura do seu footer */
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px); /* 100% da tela menos a altura do seu footer */
 }
 
 #game {
-    display: flex;
-    flex-direction: column;
-    flex: 1; /* Faz o jogo ocupar todo o espaço do main */
-    background-color: #1a1a1a;
-    color: white;
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Faz o jogo ocupar todo o espaço do main */
+  background-color: #1a1a1a;
+  color: white;
 }
 
 .header {
-    text-align: center;
-    background: #333;
-    z-index: 10; /* Garante que o header fique acima de outros elementos */
+  text-align: center;
+  background: #333;
+  z-index: 10; /* Garante que o header fique acima de outros elementos */
 }
 
 #game_title {
-    margin: 0;
-    padding: 10px 0 3px 0;
-    font-size: 1.5rem;
+  margin: 0;
+  padding: 10px 0 3px 0;
+  font-size: 1.5rem;
 }
 
 #game_version {
-    margin: 0;
-    padding: 0 0 10px 0;
-    font-size: 1rem;
+  margin: 0;
+  padding: 0 0 10px 0;
+  font-size: 1rem;
 }
 
 /* Ajuste do HUD para ser uma coluna */
 .hud {
-    display: flex;
-    flex-direction: column; /* Empilha linha de cima e linha de baixo */
-    align-items: center;    /* Centraliza tudo horizontalmente */
-    padding: 0 0 15px 0;        /* Dá um respiro interno */
-    background: #333;
-    gap: 10px;              /* Espaço entre os contadores e a barra */
-    font-size: 1rem;
+  display: flex;
+  flex-direction: column; /* Empilha linha de cima e linha de baixo */
+  align-items: center; /* Centraliza tudo horizontalmente */
+  padding: 0 0 15px 0; /* Dá um respiro interno */
+  background: #333;
+  gap: 10px; /* Espaço entre os contadores e a barra */
+  font-size: 1rem;
 }
 
 .hud-top {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
 }
 
 .counters {
-    margin: 8px;
-    padding: 0.5% 2%;
-    color: #eee;
-    font-size: smaller;
-    font-weight: bold;
+  margin: 8px;
+  padding: 0.5% 2%;
+  color: #eee;
+  font-size: smaller;
+  font-weight: bold;
 }
 
 #coin_c {
-    background-color: #c0a012; /* Verde para dinheiro */
-    color: #fff1c4;
+  background-color: #c0a012; /* Verde para dinheiro */
+  color: #fff1c4;
 }
 
 #damage_c {
-    background-color: #d65454; /* Vermelho para dano */
-    color: #ffcbcb;
+  background-color: #d65454; /* Vermelho para dano */
+  color: #ffcbcb;
 }
 
 /* --- NOVA BARRA DE XP NO HUD --- */
 .player_xp_container {
-    width: 250px;
-    height: 15px;
-    background-color: #24312c;
-    border-radius: 7px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 250px;
+  height: 15px;
+  background-color: #24312c;
+  border-radius: 7px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .player_xp_fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background:  #5bb992;
-    width: 0%; /* Começa em 0 */
-    transition: width 0.3s ease;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #5bb992;
+  width: 0%; /* Começa em 0 */
+  transition: width 0.3s ease;
 }
 
 .player_xp_text {
-    position: relative; /* Fica acima do preenchimento */
-    font-size: 0.65rem;
-    color: white;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgb(0, 42, 21);
+  position: relative; /* Fica acima do preenchimento */
+  font-size: 0.65rem;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgb(0, 42, 21);
 }
 
 /* --- PROGRESSION TRACKER INTEGRADO --- */
 #progression_container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 0 10px 0; /* Espaçamento para não grudar no topo */
-    background: transparent; /* Remove o fundo para integrar à play area */
-    border: none;            /* Remove bordas antigas */
-    z-index: 10;
-    pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 10px 0; /* Espaçamento para não grudar no topo */
+  background: transparent; /* Remove o fundo para integrar à play area */
+  border: none; /* Remove bordas antigas */
+  z-index: 10;
+  pointer-events: none;
 }
 
 #round_text {
-    color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 7px;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 7px;
 }
 
 #progression_circles {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 /* Estilo dos anéis conforme a imagem v0.2.5 */
 .prog-circle {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 3px solid;
-    background: transparent;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid;
+  background: transparent;
 }
 
-.prog-defeated { border-color: #2ecc71; } /* Verde */
-.prog-upcoming { border-color: #e74c3c; } /* Vermelho/Coral */
+.prog-defeated {
+  border-color: #2ecc71;
+} /* Verde */
+.prog-upcoming {
+  border-color: #e74c3c;
+} /* Vermelho/Coral */
 
 /* Círculo atual com brilho (Glow) */
 .prog-current {
-    border-color: #f1c40f; /* Amarelo */
-    box-shadow: 0 0 10px #f1c40f; 
+  border-color: #f1c40f; /* Amarelo */
+  box-shadow: 0 0 10px #f1c40f;
 }
 
 #stage_multiplier {
-    /* Removido position: absolute, top, left e transform */
-    padding: 3px 15px;
-    color: #ffd700; 
-    font-size: 0.9rem;
-    font-weight: bold;
-    pointer-events: none; 
-    letter-spacing: 1px;
-    z-index: 10;
+  /* Removido position: absolute, top, left e transform */
+  padding: 3px 15px;
+  color: #ffd700;
+  font-size: 0.9rem;
+  font-weight: bold;
+  pointer-events: none;
+  letter-spacing: 1px;
+  z-index: 10;
 }
 
 #mult_value {
-    color: #fff;
+  color: #fff;
 }
 
 #play_field {
-    flex: 1; 
-    display: flex;
-    flex-direction: column; /* FORÇA UM EM CIMA DO OUTRO */
-    justify-content: flex-start; /* COMEÇA DO TOPO */
-    align-items: center;    /* CENTRALIZA TUDO HORIZONTALMENTE */
-    overflow: hidden;   
-    background: #222222;
-    cursor: crosshair;
-    position: relative; 
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* FORÇA UM EM CIMA DO OUTRO */
+  justify-content: flex-start; /* COMEÇA DO TOPO */
+  align-items: center; /* CENTRALIZA TUDO HORIZONTALMENTE */
+  overflow: hidden;
+  background: #222222;
+  cursor: crosshair;
+  position: relative;
 }
 
 .coin {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    font-weight: bold;
-    font-size: 0.8rem; /* Diminuir um pouco para caber o texto +5 */
-    user-select: none;
-    z-index: 5;
-    border: 3px solid; /* Deixe apenas a borda, a cor virá do JS */
-    animation: coinLifeCycle 10s linear forwards; 
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 0.8rem; /* Diminuir um pouco para caber o texto +5 */
+  user-select: none;
+  z-index: 5;
+  border: 3px solid; /* Deixe apenas a borda, a cor virá do JS */
+  animation: coinLifeCycle 10s linear forwards;
 }
 
 /* Novo: Estilo do texto do Nível (Verde) */
 .coin_level {
-    font-size: 0.65rem;  /* Um pouco menor, no topo */
-    font-weight: bold;
+  font-size: 0.65rem; /* Um pouco menor, no topo */
+  font-weight: bold;
 }
 
 /* Novo: Estilo do texto do Valor (Amarelo com +) */
 .coin_value {
-    font-size: 0.75rem; /* Um pouco maior, embaixo */
-    font-weight: bold;
-    margin-top: -2px;   /* Ajuste fino para aproximar os números */
+  font-size: 0.75rem; /* Um pouco maior, embaixo */
+  font-weight: bold;
+  margin-top: -2px; /* Ajuste fino para aproximar os números */
 }
 
 @keyframes coinLifeCycle {
-    0% { transform: scale(0); opacity: 0; }
-    2% { transform: scale(1.07); opacity: 1; } /* Efeito de "pop" ao nascer */
-    8% { transform: scale(1); opacity: 1; }
-    80% { transform: scale(1); opacity: 1; filter: brightness(1); }
-    100% { transform: scale(0.2); opacity: 0; filter: brightness(2); } /* Fica pequena e brilha antes de sumir */
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  2% {
+    transform: scale(1.07);
+    opacity: 1;
+  } /* Efeito de "pop" ao nascer */
+  8% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+    filter: brightness(2);
+  } /* Fica pequena e brilha antes de sumir */
 }
 
 /* --- ANIMAÇÃO DE FLUTUAR E SUMIR (FLOATING SCORE) --- */
 @keyframes floatUpAndFade {
-    0% {
-        transform: translateY(0); /* Posição inicial */
-        opacity: 1;               /* Totalmente visível */
-    }
-    100% {
-        transform: translateY(-50px); /* Flutua 50px para cima */
-        opacity: 0;                   /* Fica totalmente invisível */
-    }
+  0% {
+    transform: translateY(0); /* Posição inicial */
+    opacity: 1; /* Totalmente visível */
+  }
+  100% {
+    transform: translateY(-50px); /* Flutua 50px para cima */
+    opacity: 0; /* Fica totalmente invisível */
+  }
 }
 
 /* Novo: Classe para o texto flutuante */
 .floating_score {
-    position: absolute;      /* Essencial para sobrepor a moeda */
-    font-size: 0.8rem;       /* Tamanho para ser visível */
-    color: #ffd700;          /* Cor amarela idêntica ao valor da moeda */
-    font-weight: bold;
-    font-family: monospace;   /* Mantém a consistência da fonte */
-    pointer-events: none;     /* Garante que o clique não "atrapalhe" a animação */
-    z-index: 100;            /* Fica acima de tudo na playarea */
-    
-    /* Aplica a animação: 0.5s, animação linear, e para no final */
-    animation: floatUpAndFade 0.5s linear forwards; 
+  position: absolute; /* Essencial para sobrepor a moeda */
+  font-size: 0.8rem; /* Tamanho para ser visível */
+  color: #ffd700; /* Cor amarela idêntica ao valor da moeda */
+  font-weight: bold;
+  font-family: monospace; /* Mantém a consistência da fonte */
+  pointer-events: none; /* Garante que o clique não "atrapalhe" a animação */
+  z-index: 100; /* Fica acima de tudo na playarea */
+
+  /* Aplica a animação: 0.5s, animação linear, e para no final */
+  animation: floatUpAndFade 0.5s linear forwards;
+}
+
+/* --- ESTILOS DO ANUNCIADOR DE RODADA --- */
+#round_announcement {
+  position: absolute;
+  /* Centralizado horizontalmente e posicionado na área verde que você desenhou */
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffd700; /* Dourado */
+  text-shadow:
+    0 0 10px #ff8c00,
+    0 0 20px #ff8c00; /* Brilho laranja/dourado */
+  text-align: center;
+
+  /* Muito importante: ignora cliques para não bloquear o mouse do jogador */
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0; /* Escondido por padrão */
+}
+
+/* Estilo do Título (Rodada Concluída) */
+#round_title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 10px #FF8C00;
+  margin-bottom: 5px;
+}
+
+/* Estilo do Alerta de Vida (Novo Texto Vermelho) */
+#round_stats_alert {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ff4d4d; /* Vermelho vivo */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
+}
+
+.animate-round-text {
+  animation: popAndFade 2.5s ease-out forwards;
+}
+
+/* A coreografia da animação */
+@keyframes popAndFade {
+  /* 0% a 15%: Aparece rápido crescendo e subindo levemente */
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1.1);
+  }
+
+  /* 15% a 30%: Assenta no tamanho normal */
+  30% {
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  /* 30% a 70%: Fica parado para o jogador ler */
+  70% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  /* 70% a 100%: Começa a subir lentamente e some */
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -40px) scale(0.9);
+  }
 }
 
 .target_wrapper {
-    /* flex: .5;  <-- REMOVA ESTA LINHA */
-    margin: auto; /* MÁGICA: Empurra o elemento para o centro do espaço disponível no play_field! */
-    
-    display: flex;
-    flex-direction: column; 
-    align-items: center;    
-    justify-content: center; 
-    gap: 15px;               
-    
-    /* width: 20%; <-- Mude para um tamanho fixo em pixels para ter mais controle */
-    width: 250px; 
-    padding: 20px; /* Dá um respiro para o alvo e a barra não colarem na borda */
-    z-index: 100;
+  margin: auto; /* MÁGICA: Empurra o elemento para o centro do espaço disponível no play_field! */
 
-    /* Mantive suas cores de teste para você visualizar a área proibida
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  /* width: 20%; <-- Mude para um tamanho fixo em pixels para ter mais controle */
+  width: 250px;
+  padding: 20px; /* Dá um respiro para o alvo e a barra não colarem na borda */
+  z-index: 100;
+
+  /* Mantive suas cores de teste para você visualizar a área proibida
     border: 3px solid red;
     background-color: #d8857c;
     border-radius: 10px; Deixei levemente arredondado para ficar mais bonito */
 }
 
 #object {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto; 
-    display: block;
-    position: relative;
-    transition: background-color 0.3s ease, border-radius 0.3s ease; /* Transição suave ao trocar de alvo */
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  transition:
+    background-color 0.3s ease,
+    border-radius 0.3s ease; /* Transição suave ao trocar de alvo */
 }
 
 /* --- PARTÍCULAS DE BRILHO DO ALVO --- */
 @keyframes particleExplosion {
-    0% {
-        transform: translate(0, 0) scale(1) rotate(0deg); /* Posição inicial */
-        opacity: 1;               /* Totalmente visível */
-    }
-    100% {
-        /* Flutua para cima e para os lados de forma aleatória e desaparece */
-        /* Usaremos variáveis CSS para as posições aleatórias */
-        transform: translate(var(--rand-x), var(--rand-y)) scale(0.2) rotate(var(--rand-rotate)); 
-        opacity: 0;                   /* Fica totalmente invisível */
-    }
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg); /* Posição inicial */
+    opacity: 1; /* Totalmente visível */
+  }
+  100% {
+    /* Flutua para cima e para os lados de forma aleatória e desaparece */
+    /* Usaremos variáveis CSS para as posições aleatórias */
+    transform: translate(var(--rand-x), var(--rand-y)) scale(0.2)
+      rotate(var(--rand-rotate));
+    opacity: 0; /* Fica totalmente invisível */
+  }
 }
 
 /* Nova: Classe para a partícula de brilho */
 .target-particle {
-    position: absolute;      /* Essencial para sobrepor o alvo */
-    width: 8px;              /* Pequenas bolinhas */
-    height: 8px;
-    border-radius: 50%;      /* Círculo */
-    background-color: #ffffff; /* Cor amarela idêntica ao brilho do alvo */
-    box-shadow: 0 0 10px #a6a6a6; /* Um leve glow para o brilho */
-    pointer-events: none;     /* Garante que o clique não "atrapalhe" a partícula */
-    z-index: 1000;            /* Fica acima de tudo na playarea */
-    
-    animation: particleExplosion 1.1s ease-out forwards; 
+  position: absolute; /* Essencial para sobrepor o alvo */
+  width: 8px; /* Pequenas bolinhas */
+  height: 8px;
+  border-radius: 50%; /* Círculo */
+  background-color: #ffffff; /* Cor amarela idêntica ao brilho do alvo */
+  box-shadow: 0 0 10px #a6a6a6; /* Um leve glow para o brilho */
+  pointer-events: none; /* Garante que o clique não "atrapalhe" a partícula */
+  z-index: 1000; /* Fica acima de tudo na playarea */
+
+  animation: particleExplosion 1.1s ease-out forwards;
 }
 
 /* Nossas Novas Formas Geométricas */
 .shape-circle {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .shape-square {
-    border-radius: 15%; /* Cantos levemente arredondados para ficar bonito */
+  border-radius: 15%; /* Cantos levemente arredondados para ficar bonito */
 }
 
 .shape-triangle {
-    border-radius: 0%;
-    /* O clip-path corta o quadrado original no formato de um triângulo! */
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
+  border-radius: 0%;
+  /* O clip-path corta o quadrado original no formato de um triângulo! */
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
 .shape-diamond {
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }
 
 .shape-pentagon {
-    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
 }
 
 .shape-hexagon {
-    /* Hexágono Proporcional (Flat-topped) */
-    clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0% 50%);
+  /* Hexágono Proporcional (Flat-topped) */
+  clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0% 50%);
 }
 
 /* --- ANIMAÇÃO DE QUEBRA (ESTILHAÇO) --- */
 @keyframes fragmentShatter {
-    0% {
-        transform: translate(0, 0) rotate(0deg) scale(.3); /* Posição inicial centralizada */
-        opacity: .8; /* Totalmente visível */
-    }
-    100% {
-        /* Flutua para fora usando variáveis CSS aleatórias geradas pelo JS */
-        transform: translate(var(--frag-tx), var(--frag-ty)) rotate(var(--frag-rot)) scale(0.1);
-        opacity: 0; /* Desaparece */
-    }
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(0.3); /* Posição inicial centralizada */
+    opacity: 0.8; /* Totalmente visível */
+  }
+  100% {
+    /* Flutua para fora usando variáveis CSS aleatórias geradas pelo JS */
+    transform: translate(var(--frag-tx), var(--frag-ty)) rotate(var(--frag-rot))
+      scale(0.1);
+    opacity: 0; /* Desaparece */
+  }
 }
 
 /* Classe dos Cacos (Estilhaços) */
 .shatter-fragment {
-    position: absolute;
-    z-index: 50; /* Acima do alvo, abaixo da HUD se houver sobreposição */
-    pointer-events: none; /* Não atrapalha cliques enquanto está quebrando */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Uma borda leve para separar os cacos se forem quadrados */
-    
-    /* Aplica a animação: 0.8s, suave no final, para no final */
-    animation: fragmentShatter 0.7s ease-out forwards;
+  position: absolute;
+  z-index: 50; /* Acima do alvo, abaixo da HUD se houver sobreposição */
+  pointer-events: none; /* Não atrapalha cliques enquanto está quebrando */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Uma borda leve para separar os cacos se forem quadrados */
+
+  /* Aplica a animação: 0.8s, suave no final, para no final */
+  animation: fragmentShatter 0.7s ease-out forwards;
 }
 
 /* Ajustes necessários nas formas geométricas para os cacos */
 /* Os cacos herdam a forma (.shape-circle etc) do alvo real via JS */
 
 .shatter-fragment.shape-triangle {
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    border: none; /* Clip-path corta bordas padrão, então removemos a borda leve */
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border: none; /* Clip-path corta bordas padrão, então removemos a borda leve */
 }
 
 .shatter-fragment.shape-diamond {
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    border: none;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border: none;
 }
 
 .shatter-fragment.shape-pentagon {
-    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-    border: none;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  border: none;
 }
 
 .shatter-fragment.shape-hexagon {
-    clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0% 50%);
-    border: none;
+  clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0% 50%);
+  border: none;
 }
 
 /* Quadrados e Círculos já funcionam com a classe shatter-fragment padrão */
 
 /* Estilo do Nome */
 .object_name {
-    margin: 0 auto;
-    color: white;
-    font-size: 1.1rem;
-    text-align: center;
+  margin: 0 auto;
+  color: white;
+  font-size: 1.1rem;
+  text-align: center;
 }
 
 /* Estilo do Container da Barra (A borda/fundo da barra) */
 .health_bar_container {
-    width: 150px;      
-    height: 12px;
-    background-color: #522828; /* Cor de fundo "vazia" */
-    /* border: 2px solid #3d1c1c; */
-    border-radius: 7px;
-    overflow: hidden;   /* Garante que o preenchimento não vaze */
-
+  width: 150px;
+  height: 12px;
+  background-color: #522828; /* Cor de fundo "vazia" */
+  /* border: 2px solid #3d1c1c; */
+  border-radius: 7px;
+  overflow: hidden; /* Garante que o preenchimento não vaze */
 }
 
 /* Estilo do Preenchimento (A parte colorida da vida) */
 .health_bar_fill {
-    height: 100%;
-    background-color: #d65454; /* Cor vermelha de vida */
-    transition: width 0.150s ease-out; /* Animação suave quando a vida muda */
+  height: 100%;
+  background-color: #d65454; /* Cor vermelha de vida */
+  transition: width 0.15s ease-out; /* Animação suave quando a vida muda */
 }
 
 #health_text {
-    margin: 0;
-    color: white;
-    font-size: 0.9rem;
+  margin: 0;
+  color: white;
+  font-size: 0.9rem;
 }
 
 footer {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #111;
-    color: #666;
-    font-size: 0.8rem;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  color: #666;
+  font-size: 0.8rem;
 }

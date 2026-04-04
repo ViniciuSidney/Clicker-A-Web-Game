@@ -65,7 +65,7 @@ const target = {
   maxHealth: 10,
   currentHealth: 10,
   isTransitioning: false,
-  baseDamageFormula: (level) => 5 * Math.pow(1.3, level),
+  baseDamageFormula: (level) => 5 * Math.pow(1.15, level),
 };
 
 const coinConfig = {
@@ -141,8 +141,8 @@ function updateUI() {
   ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
   ui.damageDisplay.innerText = `Dano por Clique: ${formatNumber(player.damagePerClick)}`;
 
-  ui.xpBar.style.width = `50%`;
-  ui.xpText.innerText = `Nv. ${player.level} (50%)`;
+  ui.xpBar.style.width = `100%`;
+  ui.xpText.innerText = `Nv. ${player.level}`;
 
   ui.targetObject.className = `objects ${currentTargetData.shape}`;
   ui.targetObject.style.backgroundColor = currentTargetData.color;
@@ -194,25 +194,40 @@ function formatNumber(num) {
   if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
   if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
   if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return Math.floor(num).toString();
+  return (num).toFixed(1).toString();
+}
+
+// --- FUNÇÃO PARA MOSTRAR O ANÚNCIO DE RODADA ---
+function showRoundAnnouncer(roundNum) {
+  const container = document.getElementById('round_announcement');
+  const title = document.getElementById('round_title');
+  const alert = document.getElementById('round_stats_alert');
+
+  // Mostra o bônus que será aplicado na PRÓXIMA rodada
+  // Se terminou a rodada 1, avisa que agora os alvos têm +25% de vida
+  const nextBonus = 50; // 50% de aumento por rodada completa (25% do crescimento + 25% do bônus)
+
+  title.innerText = `Rodada ${roundNum} Concluída!`;
+  alert.innerText = `⚠ Dificuldade Aumentada: Alvos +${nextBonus}% de Vida!`;
+
+  container.classList.remove('animate-round-text');
+  void container.offsetWidth;
+  container.classList.add('animate-round-text');
 }
 
 // --- CORE GAME FUNCTIONS ---
 
 // --- FUNÇÃO DE BALANÇO AUTOMÁTICO ---
 function getScaledHealth(baseHealth) {
-  // Calcula quantos "níveis de dificuldade" o jogador acumulou de rodadas anteriores.
-  // Na Rodada 1, isso será 0. Na Rodada 2, será 6 (tamanho da lista), etc.
-  const extraLevels = (target.round - 1) * targetList.length;
-  
-  // O fator de escala (1.15x) só é aplicado com base nos níveis extras das rodadas passadas.
-  // Na Rodada 1, Math.pow(1.15, 0) resultará exatamente em 1 (sem alteração).
-  const scalingFactor = Math.pow(1.25, extraLevels);
+  // 0.10 (10%) + 0.15 (15%) = 0.25 (25% de aumento por rodada)
+  const totalGrowthFactor = 0.50;
 
-  // O bônus da rodada dá um empurrãozinho extra a cada ciclo completo
-  const roundBonus = 1 + (target.round - 1) * 0.2; // Reduzi de 0.5 para 0.2 para ficar mais justo
+  // No Round 1, o multiplicador será 1 (vida base)
+  // No Round 2, será 1.25 (10 + 12.5)
+  // No Round 3, será 1.50, e assim por diante
+  const multiplier = 1 + (target.round - 1) * totalGrowthFactor;
 
-  return Math.floor(baseHealth * scalingFactor * roundBonus);
+  return Math.floor(baseHealth * multiplier);
 }
 
 function spawnCoin() {
@@ -422,6 +437,9 @@ function handleTargetClick(clickX, clickY) {
 
       if (target.currentIndex >= targetList.length) {
         target.currentIndex = 0;
+
+        showRoundAnnouncer(target.round);
+
         target.round++;
         console.log(`Rodada ${target.round} iniciada!`);
       }
