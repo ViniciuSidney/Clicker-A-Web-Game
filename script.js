@@ -5,11 +5,33 @@
 const player = {
   level: 1,
   xp: 0,
-  xpNextLevel: 100,
+  xpNextLevel: 10,
   coins: 0,
-  damagePerClick: 10,
   totalClicks: 0,
-  getLevelMultiplier: () => 1 + (player.level - 1) * 0.05,
+
+  upgrades: {
+      clickBase: 0, 
+      clickMult: 0, 
+      clickPower: 1 
+  },
+
+  getDamage: function() {
+      const base = 10;
+
+      // 1. Upgrades somam na base (o "alicerce" do seu dano)
+      // Se o clickBase for 5, a base vira 20.
+      const upgradeBonus = (this.upgrades.clickBase * 2) * this.upgrades.clickPower;
+
+      // 2. Multiplicador de Nível Exponencial (50% de aumento composto)
+      const levelMult = Math.pow(1.30, this.level - 1);
+
+      // 3. Multiplicador do Upgrade 4 (Bônus final de utilidade)
+      const upgradeMult = 1 + (this.upgrades.clickMult * 1);
+
+      // CÁLCULO FINAL: (Soma da Base) * (Multiplicador Exponencial de XP) * (Upgrades de Multiplicação)
+      // O Math.floor garante que não teremos quebrados como 22.50 na UI
+      return ((base + upgradeBonus) * levelMult * upgradeMult);
+  }
 };
 
 // Configurações dos alvos
@@ -134,25 +156,25 @@ function updateUI() {
   const healthPercentage = (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
   const xpPercentage = (player.xp / player.xpNextLevel) * 100;
   const targetMultiplier = ((target.round - 1) * targetList.length + currentTargetData.rewardMultiplier).toFixed(1);
+  const currentDamage = player.getDamage();
 
   ui.xpBar.style.width = `${xpPercentage}%`;
   ui.xpText.innerText = `Nv. ${player.level} - ${player.xp}/${player.xpNextLevel} (${Math.floor(xpPercentage)}%)`;
 
   ui.healthBar.style.width = `${healthPercentage}%`;
   ui.nameDisplay.innerHTML = `${currentTargetData.name}<br>(Nível ${target.round})`;
-  
   ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
+
   ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
-  ui.damageDisplay.innerText = `Dano por Clique: ${formatNumber(player.damagePerClick)}`;
+  ui.damageDisplay.innerText = `Dano por Clique: ${formatNumber(currentDamage)}`;
 
   ui.targetObject.className = `objects ${currentTargetData.shape}`;
   ui.targetObject.style.backgroundColor = currentTargetData.color;
 
   ui.multDisplay.innerText = `x${targetMultiplier}`;
-
   ui.roundText.innerText = `Rodada ${target.round}`;
-
   ui.progressionCircles.innerHTML = '';
+
 
   for (let i = 0; i < targetList.length; i++) {
     const circle = document.createElement('div');
@@ -206,7 +228,7 @@ function addXp(amount) {
     player.xp -= player.xpNextLevel;
     player.level++;
 
-    player.xpNextLevel = Math.floor(100 * Math.pow(1.5, player.level - 1));
+    player.xpNextLevel = Math.floor(10 * Math.pow(1.75, player.level - 1));
 
     console.log('Level Up! Novo nível: ' + player.level);
   }
@@ -214,8 +236,8 @@ function addXp(amount) {
 }
 
 function getScaledHealth(baseHealth) {
-  const totalGrowthFactor = 0.5;
-  const multiplier = 1 + (target.round - 1) * totalGrowthFactor;
+  const growthRate = 1.50; // 50% de aumento composto
+  const multiplier = Math.pow(growthRate, target.round - 1);
 
   return Math.floor(baseHealth * multiplier);
 }
@@ -345,14 +367,15 @@ function handleTargetClick(clickX, clickY) {
       if (particle) particle.remove();
     }, 800);
   }
+  const currentDamage = player.getDamage();
 
-  target.currentHealth -= player.damagePerClick;
+  target.currentHealth -= currentDamage;
   player.totalClicks++;
 
   if (Math.floor(target.currentHealth) <= 0) {
     target.isTransitioning = true;
 
-    const xpGained = currentTargetData.rewardMultiplier * 10 * target.round;
+    const xpGained = currentTargetData.rewardMultiplier * 2 * target.round;
     addXp(xpGained);
 
     const bonusQuantity = Math.floor(coinConfig.spawnQuantity);
@@ -365,6 +388,7 @@ function handleTargetClick(clickX, clickY) {
 
     ui.targetObject.style.opacity = '0';
 
+    // Efeito de fragmentação do alvo
     const numFragments = 18;
     for (let j = 0; j < numFragments; j++) {
       const fragment = document.createElement('div');
