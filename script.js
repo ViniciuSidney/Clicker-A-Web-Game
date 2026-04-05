@@ -1,3 +1,7 @@
+
+// Variáveis globais para armazenar o estado do jogo
+
+// Estado do jogador
 const player = {
   level: 1,
   xp: 0,
@@ -8,6 +12,7 @@ const player = {
   getLevelMultiplier: () => 1 + (player.level - 1) * 0.05,
 };
 
+// Configurações dos alvos
 const targetList = [
   {
     name: 'Círculo Dourado',
@@ -53,6 +58,7 @@ const targetList = [
   },
 ];
 
+// Estado do alvo atual
 const target = {
   currentIndex: 0,
   round: 1,
@@ -62,6 +68,7 @@ const target = {
   baseDamageFormula: (level) => 5 * Math.pow(1.15, level),
 };
 
+// Configurações das moedas
 const coinConfig = {
   spawnQuantity: 2,
   size: 30,
@@ -99,6 +106,7 @@ const coinConfig = {
   ],
 };
 
+// Referências para elementos da interface
 const ui = {
   targetObject: document.getElementById('object'),
   healthBar: document.getElementById('health_fill'),
@@ -118,17 +126,21 @@ const ui = {
   progressionCircles: document.getElementById('progression_circles'),
 };
 
+// ---------------------------------------------------
+
+
 function updateUI() {
   const currentTargetData = targetList[target.currentIndex];
-  const healthPercentage =
-    (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
+  const healthPercentage = (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
   const xpPercentage = (player.xp / player.xpNextLevel) * 100;
+  const targetMultiplier = ((target.round - 1) * targetList.length + currentTargetData.rewardMultiplier).toFixed(1);
 
   ui.xpBar.style.width = `${xpPercentage}%`;
   ui.xpText.innerText = `Nv. ${player.level} - ${player.xp}/${player.xpNextLevel} (${Math.floor(xpPercentage)}%)`;
 
   ui.healthBar.style.width = `${healthPercentage}%`;
   ui.nameDisplay.innerHTML = `${currentTargetData.name}<br>(Nível ${target.round})`;
+  
   ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
   ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
   ui.damageDisplay.innerText = `Dano por Clique: ${formatNumber(player.damagePerClick)}`;
@@ -136,10 +148,6 @@ function updateUI() {
   ui.targetObject.className = `objects ${currentTargetData.shape}`;
   ui.targetObject.style.backgroundColor = currentTargetData.color;
 
-  const targetMultiplier = (
-    (target.round - 1) * targetList.length +
-    currentTargetData.rewardMultiplier
-  ).toFixed(1);
   ui.multDisplay.innerText = `x${targetMultiplier}`;
 
   ui.roundText.innerText = `Rodada ${target.round}`;
