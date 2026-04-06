@@ -5,7 +5,7 @@
 const player = {
   level: 1,
   xp: 0,
-  xpNextLevel: 10,
+  xpNextLevel: 5,
   coins: 0,
   totalClicks: 0,
 
@@ -18,14 +18,14 @@ const player = {
 
   // Função para calcular o dano por clique com base no nível, upgrades e multiplicadores
   getDamage: function() {
-      const base = 10;
+      const base = 1; // Dano base inicial por clique (pode ser ajustado para balanceamento)
 
       // 1. Upgrades somam na base (o "alicerce" do seu dano)
       // Se o clickBase for 5, a base vira 20.
       const upgradeBonus = (this.upgrades.clickBase * 2) * this.upgrades.clickPower;
 
       // 2. Multiplicador de Nível Exponencial (50% de aumento composto)
-      const levelMult = Math.pow(1.30, this.level - 1);
+      const levelMult = Math.pow(1.5, this.level - 1);
 
       // 3. Multiplicador do Upgrade 4 (Bônus final de utilidade)
       const upgradeMult = 1 + (this.upgrades.clickMult * 1);
@@ -49,35 +49,35 @@ const targetList = [
     name: 'Quadrado Carmesim',
     color: 'crimson',
     shape: 'shape-square',
-    baseHealth: 50,
+    baseHealth: 25,
     rewardMultiplier: 2,
   },
   {
     name: 'Triângulo Esmeralda',
     color: 'mediumseagreen',
     shape: 'shape-triangle',
-    baseHealth: 100,
+    baseHealth: 50,
     rewardMultiplier: 3,
   },
   {
     name: 'Losango de Ametista',
     color: '#9b59b6',
     shape: 'shape-diamond',
-    baseHealth: 250,
+    baseHealth: 90,
     rewardMultiplier: 4,
   },
   {
     name: 'Pentágono de Ferro',
     color: '#7f8c8d',
     shape: 'shape-pentagon',
-    baseHealth: 500,
+    baseHealth: 175,
     rewardMultiplier: 5,
   },
   {
     name: 'Hexágono de Obsidiana',
     color: '#2c3e50',
     shape: 'shape-hexagon',
-    baseHealth: 800,
+    baseHealth: 350,
     rewardMultiplier: 6,
   },
 ];
@@ -89,7 +89,6 @@ const target = {
   maxHealth: 10,
   currentHealth: 10,
   isTransitioning: false,
-  baseDamageFormula: (level) => 5 * Math.pow(1.15, level),
 };
 
 // Configurações das moedas
@@ -160,11 +159,6 @@ function updateUI() {
   const xpPercentage = (player.xp / player.xpNextLevel) * 100;
   const targetMultiplier = ((target.round - 1) * targetList.length + currentTargetData.rewardMultiplier).toFixed(1);
   const currentDamage = player.getDamage();
-  const firstTarget = targetList[target.currentIndex];
-
-  // Inicializa o jogo definindo o primeiro alvo e atualizando a interface
-  target.maxHealth = firstTarget.baseHealth;
-  target.currentHealth = target.maxHealth;
 
   // Atualiza a barra de XP e o texto do jogador
   ui.xpBar.style.width = `${xpPercentage}%`;
@@ -204,13 +198,22 @@ function updateUI() {
     ui.progressionCircles.appendChild(circle);
   }
 }
+function initializeGame() {
+  const firstTarget = targetList[target.currentIndex];
+
+  target.maxHealth = firstTarget.baseHealth;
+  target.currentHealth = target.maxHealth;
+}
+
+// Chama a função de inicialização para configurar o estado inicial do jogo
+initializeGame();
 
 // Chama a função para atualizar a interface com os valores iniciais
 updateUI();
 
 // ---------------------------------------------------
 
-// Funções auxiliares para o jogo
+// Funções auxiliares para o jogo //
 
 // Função para formatar números grandes em uma forma mais legível (ex: 1.5K, 2.3M)
 function formatNumber(num) {
@@ -245,7 +248,7 @@ function addXp(amount) {
     player.xp -= player.xpNextLevel;
     player.level++;
 
-    player.xpNextLevel = Math.floor(10 * Math.pow(1.75, player.level - 1));
+    player.xpNextLevel = Math.floor(5 * Math.pow(1.5, player.level - 1));
 
     console.log('Level Up! Novo nível: ' + player.level);
   }
@@ -262,7 +265,7 @@ function getScaledHealth(baseHealth) {
 
 // ---------------------------------------------------
 
-// Funções principais do jogo
+// Funções principais do jogo //
 
 // Função para gerar uma moeda no campo de jogo com base nas configurações e na posição do alvo
 function spawnCoin() {
@@ -463,12 +466,8 @@ function handleTargetClick(clickX, clickY) {
 
       // Obtém os dados do próximo alvo com base no índice atualizado e calcula a saúde máxima do novo alvo usando a função getScaledHealth, que aplica um aumento composto com base na rodada atual para tornar os alvos progressivamente mais difíceis. Em seguida, ele define a saúde atual do alvo para o valor máximo calculado.
       const nextTargetData = targetList[target.currentIndex];
-
       target.maxHealth = getScaledHealth(nextTargetData.baseHealth);
       target.currentHealth = target.maxHealth;
-
-      // O dano por clique do jogador é aumentado com base na fórmula definida em target.baseDamageFormula, que leva em consideração o nível do jogador para calcular um aumento progressivo no dano. Isso cria uma sensação de progressão e recompensa o jogador por avançar nas rodadas.
-      player.damagePerClick += target.baseDamageFormula(player.level);
 
       updateUI();
 
