@@ -240,18 +240,46 @@ function showRoundAnnouncer(roundNum) {
   container.classList.add('animate-round-text');
 }
 
+// 
+function showLevelUpAnnouncer(levelNum, damageBonus) {
+  const container = document.getElementById('level_announcement');
+  const title = document.getElementById('level_title');
+  const alert = document.getElementById('level_stats_alert');
+
+  // Atualiza os textos
+  title.innerText = `Nível ${levelNum} Alcançado!`;
+  alert.innerText = `✨ Poder Aumentado: +${formatNumber(damageBonus)} de Dano!`;
+
+  // Reinicia a animação (truque para poder rodar várias vezes seguidas)
+  container.classList.remove('animate-level-text');
+  void container.offsetWidth; 
+  container.classList.add('animate-level-text');
+}
+
 // Função para adicionar experiência ao jogador e verificar se ele sobe de nível
 function addXp(amount) {
   player.xp += amount;
 
   if (player.xp >= player.xpNextLevel) {
     player.xp -= player.xpNextLevel;
+    
+    // 1. Salva o dano antigo
+    const damageBefore = player.getDamage(); 
+    
+    // 2. Sobe de Nível
     player.level++;
+    
+    // 3. Pega o dano novo e calcula a diferença
+    const damageAfter = player.getDamage();
+    const damageIncrease = damageAfter - damageBefore;
 
-    player.xpNextLevel = Math.floor(5 * Math.pow(1.5, player.level - 1));
-
+    player.xpNextLevel = Math.floor(10 * Math.pow(1.75, player.level - 1));
     console.log('Level Up! Novo nível: ' + player.level);
+    
+    // 4. Chama o nosso novo anunciador passando o nível e a diferença de dano!
+    showLevelUpAnnouncer(player.level, damageIncrease);
   }
+  
   updateUI();
 }
 
