@@ -1,4 +1,3 @@
-
 // Variáveis globais para armazenar o estado do jogo
 
 // Estado do jogador
@@ -9,31 +8,24 @@ const player = {
   coins: 0,
   totalClicks: 0,
 
-  // Upgrades de clique: cada um tem um efeito diferente no cálculo do dano
   upgrades: {
-      clickBase: 0, 
-      clickMult: 0, 
-      clickPower: 1 
+    clickBase: 0,
+    clickMult: 0,
+    clickPower: 1,
+
+    clickCritChance: 0,
+    passiveDamage: 0,
+    autoCollectChance: 0,
   },
 
-  // Função para calcular o dano por clique com base no nível, upgrades e multiplicadores
-  getDamage: function() {
-      const base = 1; // Dano base inicial por clique (pode ser ajustado para balanceamento)
+  getDamage: function () {
+    const base = 1;
+    const upgradeBonus = this.upgrades.clickBase * 2 * this.upgrades.clickPower;
+    const levelMult = Math.pow(1.5, this.level - 1);
+    const upgradeMult = 1 + this.upgrades.clickMult * 1;
 
-      // 1. Upgrades somam na base (o "alicerce" do seu dano)
-      // Se o clickBase for 5, a base vira 20.
-      const upgradeBonus = (this.upgrades.clickBase * 2) * this.upgrades.clickPower;
-
-      // 2. Multiplicador de Nível Exponencial (50% de aumento composto)
-      const levelMult = Math.pow(1.5, this.level - 1);
-
-      // 3. Multiplicador do Upgrade 4 (Bônus final de utilidade)
-      const upgradeMult = 1 + (this.upgrades.clickMult * 1);
-
-      // CÁLCULO FINAL: (Soma da Base) * (Multiplicador Exponencial de XP) * (Upgrades de Multiplicação)
-      // O Math.floor garante que não teremos quebrados como 22.50 na UI
-      return ((base + upgradeBonus) * levelMult * upgradeMult);
-  }
+    return (base + upgradeBonus) * levelMult * upgradeMult;
+  },
 };
 
 // Configurações dos alvos
@@ -129,6 +121,37 @@ const coinConfig = {
   ],
 };
 
+const shopConfig = {
+  growthRate: 1.15,
+
+  upgrades: {
+    clickBase: {
+      name: 'Força Bruta',
+      baseCost: 50,
+      levelKey: 'clickBase',
+      maxLevel: Infinity,
+    },
+    clickCritChance: {
+      name: 'Golpe Crítico',
+      baseCost: 150,
+      levelKey: 'clickCritChance',
+      maxLevel: Infinity,
+    },
+    passiveDamage: {
+      name: 'Impacto Passivo',
+      baseCost: 100,
+      levelKey: 'passiveDamage',
+      maxLevel: Infinity,
+    },
+    autoCollectChance: {
+      name: 'Coleta Parcial',
+      baseCost: 300,
+      levelKey: 'autoCollectChance',
+      maxLevel: Infinity,
+    },
+  },
+};
+
 // Referências para elementos da interface
 const ui = {
   targetObject: document.getElementById('object'),
@@ -147,6 +170,7 @@ const ui = {
 
   roundText: document.getElementById('round_text'),
   progressionCircles: document.getElementById('progression_circles'),
+  shopButtons: document.querySelectorAll('.upgrade_card'),
 };
 
 // ---------------------------------------------------
@@ -155,9 +179,13 @@ const ui = {
 function updateUI() {
   // Valores atuais do alvo e do jogador para cálculos e exibição
   const currentTargetData = targetList[target.currentIndex];
-  const healthPercentage = (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
+  const healthPercentage =
+    (Math.max(0, target.currentHealth) / target.maxHealth) * 100;
   const xpPercentage = (player.xp / player.xpNextLevel) * 100;
-  const targetMultiplier = ((target.round - 1) * targetList.length + currentTargetData.rewardMultiplier).toFixed(1);
+  const targetMultiplier = (
+    (target.round - 1) * targetList.length +
+    currentTargetData.rewardMultiplier
+  ).toFixed(1);
   const currentDamage = player.getDamage();
 
   // Atualiza a barra de XP e o texto do jogador
@@ -197,6 +225,8 @@ function updateUI() {
 
     ui.progressionCircles.appendChild(circle);
   }
+
+  renderShop();
 }
 function initializeGame() {
   const firstTarget = targetList[target.currentIndex];
@@ -210,6 +240,8 @@ initializeGame();
 
 // Chama a função para atualizar a interface com os valores iniciais
 updateUI();
+
+renderShop();
 
 // ---------------------------------------------------
 
@@ -240,7 +272,7 @@ function showRoundAnnouncer(roundNum) {
   container.classList.add('animate-round-text');
 }
 
-// 
+// Função para mostrar o anúncio de nível alcançado com o bônus de dano aumentado
 function showLevelUpAnnouncer(levelNum, damageBonus) {
   const container = document.getElementById('level_announcement');
   const title = document.getElementById('level_title');
@@ -252,7 +284,7 @@ function showLevelUpAnnouncer(levelNum, damageBonus) {
 
   // Reinicia a animação (truque para poder rodar várias vezes seguidas)
   container.classList.remove('animate-level-text');
-  void container.offsetWidth; 
+  void container.offsetWidth;
   container.classList.add('animate-level-text');
 }
 
@@ -262,30 +294,30 @@ function addXp(amount) {
 
   if (player.xp >= player.xpNextLevel) {
     player.xp -= player.xpNextLevel;
-    
+
     // 1. Salva o dano antigo
-    const damageBefore = player.getDamage(); 
-    
+    const damageBefore = player.getDamage();
+
     // 2. Sobe de Nível
     player.level++;
-    
+
     // 3. Pega o dano novo e calcula a diferença
     const damageAfter = player.getDamage();
     const damageIncrease = damageAfter - damageBefore;
 
     player.xpNextLevel = Math.floor(10 * Math.pow(1.75, player.level - 1));
     console.log('Level Up! Novo nível: ' + player.level);
-    
+
     // 4. Chama o nosso novo anunciador passando o nível e a diferença de dano!
     showLevelUpAnnouncer(player.level, damageIncrease);
   }
-  
+
   updateUI();
 }
 
 // Função para calcular a saúde do alvo com base na rodada atual usando um aumento composto
 function getScaledHealth(baseHealth) {
-  const growthRate = 1.50; // 50% de aumento composto
+  const growthRate = 1.5; // 50% de aumento composto
   const multiplier = Math.pow(growthRate, target.round - 1);
 
   return Math.floor(baseHealth * multiplier);
@@ -294,6 +326,76 @@ function getScaledHealth(baseHealth) {
 // ---------------------------------------------------
 
 // Funções principais do jogo //
+
+// Função para calcular o custo de um upgrade com base no nível atual do upgrade e na taxa de crescimento definida em shopConfig
+function getUpgradeCost(upgradeId) {
+  const upgrade = shopConfig.upgrades[upgradeId];
+  const currentLevel = player.upgrades[upgrade.levelKey];
+
+  return Math.floor(
+    upgrade.baseCost * Math.pow(shopConfig.growthRate, currentLevel),
+  );
+}
+
+// Função para processar a compra de um upgrade, verificando se o jogador tem moedas suficientes, aplicando o efeito do upgrade e atualizando a interface da loja
+function buyUpgrade(upgradeId) {
+  const upgrade = shopConfig.upgrades[upgradeId];
+  if (!upgrade) return;
+
+  const currentLevel = player.upgrades[upgrade.levelKey];
+  const cost = getUpgradeCost(upgradeId);
+
+  if (currentLevel >= upgrade.maxLevel) {
+    console.log(`[SHOP] ${upgrade.name} já está no nível máximo.`);
+    return;
+  }
+
+  if (player.coins < cost) {
+    console.log(
+      `[SHOP] Moedas insuficientes para ${upgrade.name}. Custo: ${cost}`,
+    );
+    return;
+  }
+
+  player.coins -= cost;
+  player.upgrades[upgrade.levelKey]++;
+
+  console.log(
+    `[SHOP] Comprado: ${upgrade.name} | Novo nível: ${player.upgrades[upgrade.levelKey]} | Custo: ${cost}`,
+  );
+
+  updateUI();
+  renderShop();
+}
+
+// Função para atualizar a interface da loja, mostrando os nomes, níveis e custos dos upgrades, além de habilitar ou desabilitar os botões com base na quantidade de moedas do jogador
+function renderShop() {
+  ui.shopButtons.forEach((button) => {
+    const upgradeId = button.dataset.upgradeId;
+    const upgrade = shopConfig.upgrades[upgradeId];
+    if (!upgrade) return;
+
+    const level = player.upgrades[upgrade.levelKey];
+    const cost = getUpgradeCost(upgradeId);
+
+    const nameEl = button.querySelector('.upgrade_name');
+    const costEl = button.querySelector('.upgrade_cost');
+
+    if (nameEl) {
+      nameEl.innerText = `${upgrade.name} Nv.${level}`;
+    }
+
+    if (costEl) {
+      costEl.innerText = formatNumber(cost);
+    }
+
+    const canBuy = player.coins >= cost;
+    button.disabled = false;
+
+    button.classList.toggle('can-buy', canBuy);
+    button.classList.toggle('cannot-buy', !canBuy);
+  });
+}
 
 // Função para gerar uma moeda no campo de jogo com base nas configurações e na posição do alvo
 function spawnCoin() {
@@ -387,6 +489,8 @@ function spawnCoin() {
 
     coin.remove();
 
+    renderShop();
+
     // O efeito de pontuação flutuante dura 0.5 segundos antes de ser removido do DOM
     setTimeout(() => {
       if (floatingScore) floatingScore.remove();
@@ -394,7 +498,9 @@ function spawnCoin() {
   });
 
   // A moeda desaparece automaticamente após um tempo definido em coinConfig.despawnTime para evitar que o campo fique muito cheio de moedas não coletadas
-  setTimeout(() => {if (coin) coin.remove();}, coinConfig.despawnTime);
+  setTimeout(() => {
+    if (coin) coin.remove();
+  }, coinConfig.despawnTime);
   ui.playField.appendChild(coin);
 }
 
@@ -520,4 +626,12 @@ ui.targetObject.addEventListener('click', (e) => {
   const y = e.clientY;
 
   handleTargetClick(x, y);
+});
+
+// Adiciona eventos de clique aos botões de upgrade na loja para que, quando o jogador clicar em um botão de upgrade, a função buyUpgrade seja chamada com o ID do upgrade correspondente para processar a compra e atualizar a interface da loja
+ui.shopButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const upgradeId = button.dataset.upgradeId;
+    buyUpgrade(upgradeId);
+  });
 });
