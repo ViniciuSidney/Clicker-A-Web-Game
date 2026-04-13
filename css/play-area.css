@@ -3,14 +3,11 @@
 ======================================== */
 
 #play_field {
-  flex: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row; /* Coloca Conteúdo e Nav lado a lado */
+  height: calc(100vh - 160px); /* Ajusta conforme o tamanho do seu header/footer */
+  padding: 0;
   overflow: hidden;
-  background: #222222;
-  cursor: crosshair;
   position: relative;
 }
 

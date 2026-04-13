@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/header-hud.css" />
-    <link rel="stylesheet" href="css/shop.css" />
+    <!-- <link rel="stylesheet" href="css/shop.css" /> -->
     <link rel="stylesheet" href="css/play-area.css" />
     <link rel="stylesheet" href="css/coins.css" />
     <link rel="stylesheet" href="css/announcements.css" />
     <link rel="stylesheet" href="css/targets.css" />
     <link rel="stylesheet" href="css/effects.css" />
-    <link rel="stylesheet" href="nav.css"/>
+    <link rel="stylesheet" href="css/nav.css"/>
     
     <title>Clicker Game v0.3.3</title>
   </head>
@@ -40,52 +40,7 @@
         <div class="play_area" id="play_field">
 
           <div id="content_canvas">
-            <aside class="shop_panel">
-              <div class="shop_header">
-                <h3>Loja</h3>
-                <p>Melhore seus atributos</p>
-              </div>
 
-              <div class="shop_section">
-                <h4>Upgrades de Clique</h4>
-
-                <button class="upgrade_card" data-upgrade-id="clickBase">
-                  <div class="upgrade_info">
-                    <span class="upgrade_name">Força Bruta</span>
-                    <span class="upgrade_desc">+2 de dano por nível</span>
-                  </div>
-                  <span class="upgrade_cost">50</span>
-                </button>
-
-                <button class="upgrade_card" data-upgrade-id="clickCritChance">
-                  <div class="upgrade_info">
-                    <span class="upgrade_name">Golpe Crítico</span>
-                    <span class="upgrade_desc">+5% de chance crítica</span>
-                  </div>
-                  <span class="upgrade_cost">150</span>
-                </button>
-              </div>
-
-              <div class="shop_section">
-                <h4>Upgrades Passivos</h4>
-
-                <button class="upgrade_card" data-upgrade-id="passiveDamage">
-                  <div class="upgrade_info">
-                    <span class="upgrade_name">Impacto Passivo</span>
-                    <span class="upgrade_desc">Ativa dano automático</span>
-                  </div>
-                  <span class="upgrade_cost">100</span>
-                </button>
-
-                <button class="upgrade_card" data-upgrade-id="autoCollectChance">
-                  <div class="upgrade_info">
-                    <span class="upgrade_name">Coleta Parcial</span>
-                    <span class="upgrade_desc">+10% de chance de coleta automática</span>
-                  </div>
-                  <span class="upgrade_cost">300</span>
-                </button>
-              </div>
-            </aside>
 
             <div id="progression_container">
               <div id="round_text">Rodada 1</div>
@@ -119,9 +74,9 @@
           </div>
         
           <nav id="side_nav">
-            <button class="nav_item active" data-target="screen_play" title="Jogar">🎮</button>
-            <button class="nav_item" data-target="screen_shop" title="Loja">🛒</button>
-            <button class="nav_item" data-target="screen_achievements" title="Conquistas">🏆</button>
+            <button class="nav_item active" data-target="screen_play" title="Arena">🎮 Arena</button>
+            <button class="nav_item" data-target="screen_shop" title="Loja">🛒 Loja</button>
+            <button class="nav_item" data-target="screen_achievements" title="Conquistas">🏆 Conquistas</button>
           </nav>
         </div>
     </main>
