@@ -1,0 +1,80 @@
+/* ========================================
+   MOEDAS
+======================================== */
+
+.coin {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 0.8rem;
+  user-select: none;
+  z-index: 5;
+  border: 3px solid;
+  animation: coinLifeCycle 10s linear forwards;
+}
+
+.coin_level {
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+.coin_value {
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-top: -2px;
+}
+
+@keyframes coinLifeCycle {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  2% {
+    transform: scale(1.07);
+    opacity: 1;
+  } /* Efeito de "pop" ao nascer */
+  8% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+
+@keyframes floatUpAndFade {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
+.floating_score {
+  position: absolute; /* Essencial para sobrepor a moeda */
+  font-size: 0.8rem; /* Tamanho para ser visível */
+  color: #ffd700;
+  font-weight: bold;
+  font-family: monospace;
+  pointer-events: none;
+  z-index: 100;
+
+  animation: floatUpAndFade 0.5s linear forwards;
+}

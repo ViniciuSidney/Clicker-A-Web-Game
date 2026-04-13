@@ -1,0 +1,87 @@
+/* ========================================
+   HEADER + HUD
+======================================== */
+
+.header {
+  text-align: center;
+  background: #333;
+  z-index: 10;
+}
+
+#game_title {
+  margin: 0;
+  padding: 10px 0 3px 0;
+  font-size: 1.5rem;
+}
+
+#game_version {
+  margin: 0;
+  padding: 0 0 10px 0;
+  font-size: 1rem;
+}
+
+/* Ajuste do HUD para ser uma coluna */
+.hud {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 15px 0;
+  background: #333;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.hud-top {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.counters {
+  margin: 8px;
+  padding: 0.5% 2%;
+  color: #eee;
+  font-size: smaller;
+  font-weight: bold;
+}
+
+#coin_c {
+  background-color: #c0a012;
+  color: #fff1c4;
+}
+
+#damage_c {
+  background-color: #d65454;
+  color: #ffcbcb;
+}
+
+.player_xp_container {
+  width: 250px;
+  height: 15px;
+  background-color: #24312c;
+  border-radius: 7px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player_xp_fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #5bb992;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.player_xp_text {
+  position: relative;
+  font-size: 0.65rem;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgb(0, 42, 21);
+}

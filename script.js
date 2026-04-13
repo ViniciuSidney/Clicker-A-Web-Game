@@ -154,9 +154,9 @@ const shopConfig = {
 
 // Referências para elementos da interface
 const ui = {
-  targetObject: document.getElementById('object'),
+  targetObject: document.getElementById('target'),
   healthBar: document.getElementById('health_fill'),
-  nameDisplay: document.querySelector('.object_name'),
+  nameDisplay: document.querySelector('.target_name'),
   playField: document.getElementById('play_field'),
   targetWrapper: document.querySelector('.target_wrapper'),
   coinsDisplay: document.querySelectorAll('.counters')[0],
@@ -166,7 +166,7 @@ const ui = {
   xpBar: document.getElementById('xp_fill'),
   xpText: document.querySelector('.player_xp_text'),
 
-  healthText: document.querySelector('.object_counters'),
+  healthText: document.querySelector('.target_counters'),
 
   roundText: document.getElementById('round_text'),
   progressionCircles: document.getElementById('progression_circles'),
