@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/announcements.css" />
     <link rel="stylesheet" href="css/targets.css" />
     <link rel="stylesheet" href="css/effects.css" />
+    <link rel="stylesheet" href="nav.css"/>
     
     <title>Clicker Game v0.3.3</title>
   </head>
@@ -36,84 +37,93 @@
           </div>
         </div>
 
-<div class="play_area" id="play_field">
-  <aside class="shop_panel">
-    <div class="shop_header">
-      <h3>Loja</h3>
-      <p>Melhore seus atributos</p>
-    </div>
+        <div class="play_area" id="play_field">
 
-    <div class="shop_section">
-      <h4>Upgrades de Clique</h4>
+          <div id="content_canvas">
+            <aside class="shop_panel">
+              <div class="shop_header">
+                <h3>Loja</h3>
+                <p>Melhore seus atributos</p>
+              </div>
 
-      <button class="upgrade_card" data-upgrade-id="clickBase">
-        <div class="upgrade_info">
-          <span class="upgrade_name">Força Bruta</span>
-          <span class="upgrade_desc">+2 de dano por nível</span>
+              <div class="shop_section">
+                <h4>Upgrades de Clique</h4>
+
+                <button class="upgrade_card" data-upgrade-id="clickBase">
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Força Bruta</span>
+                    <span class="upgrade_desc">+2 de dano por nível</span>
+                  </div>
+                  <span class="upgrade_cost">50</span>
+                </button>
+
+                <button class="upgrade_card" data-upgrade-id="clickCritChance">
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Golpe Crítico</span>
+                    <span class="upgrade_desc">+5% de chance crítica</span>
+                  </div>
+                  <span class="upgrade_cost">150</span>
+                </button>
+              </div>
+
+              <div class="shop_section">
+                <h4>Upgrades Passivos</h4>
+
+                <button class="upgrade_card" data-upgrade-id="passiveDamage">
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Impacto Passivo</span>
+                    <span class="upgrade_desc">Ativa dano automático</span>
+                  </div>
+                  <span class="upgrade_cost">100</span>
+                </button>
+
+                <button class="upgrade_card" data-upgrade-id="autoCollectChance">
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Coleta Parcial</span>
+                    <span class="upgrade_desc">+10% de chance de coleta automática</span>
+                  </div>
+                  <span class="upgrade_cost">300</span>
+                </button>
+              </div>
+            </aside>
+
+            <div id="progression_container">
+              <div id="round_text">Rodada 1</div>
+              <div id="progression_circles"></div>
+            </div>
+
+            <div id="stage_multiplier">
+              Multiplicador de Moedas: <span id="mult_value">x1.0</span>
+            </div>
+
+            <div id="round_announcement">
+              <div id="round_title"></div>
+              <div id="round_stats_alert"></div>
+            </div>
+
+            <div id="level_announcement">
+              <h2 id="level_title">Nível Alcançado!</h2>
+              <p id="level_stats_alert">Recompensa: +0 Dano</p>
+            </div>
+
+            <div class="target_wrapper">
+              <p class="target_name">Círculo Dourado</p>
+              <div class="targets" id="target"></div>
+              <div class="health_bar_container">
+                <div class="health_bar_wrapper">
+                  <div id="health_fill"></div>
+                  <div class="target_counters">0 / 0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <nav id="side_nav">
+            <button class="nav_item active" data-target="screen_play" title="Jogar">🎮</button>
+            <button class="nav_item" data-target="screen_shop" title="Loja">🛒</button>
+            <button class="nav_item" data-target="screen_achievements" title="Conquistas">🏆</button>
+          </nav>
         </div>
-        <span class="upgrade_cost">50</span>
-      </button>
-
-      <button class="upgrade_card" data-upgrade-id="clickCritChance">
-        <div class="upgrade_info">
-          <span class="upgrade_name">Golpe Crítico</span>
-          <span class="upgrade_desc">+5% de chance crítica</span>
-        </div>
-        <span class="upgrade_cost">150</span>
-      </button>
-    </div>
-
-    <div class="shop_section">
-      <h4>Upgrades Passivos</h4>
-
-      <button class="upgrade_card" data-upgrade-id="passiveDamage">
-        <div class="upgrade_info">
-          <span class="upgrade_name">Impacto Passivo</span>
-          <span class="upgrade_desc">Ativa dano automático</span>
-        </div>
-        <span class="upgrade_cost">100</span>
-      </button>
-
-      <button class="upgrade_card" data-upgrade-id="autoCollectChance">
-        <div class="upgrade_info">
-          <span class="upgrade_name">Coleta Parcial</span>
-          <span class="upgrade_desc">+10% de chance de coleta automática</span>
-        </div>
-        <span class="upgrade_cost">300</span>
-      </button>
-    </div>
-  </aside>
-
-  <div id="progression_container">
-    <div id="round_text">Rodada 1</div>
-    <div id="progression_circles"></div>
-  </div>
-
-  <div id="stage_multiplier">
-    Multiplicador de Moedas: <span id="mult_value">x1.0</span>
-  </div>
-
-  <div id="round_announcement">
-    <div id="round_title"></div>
-    <div id="round_stats_alert"></div>
-  </div>
-
-  <div id="level_announcement">
-    <h2 id="level_title">Nível Alcançado!</h2>
-    <p id="level_stats_alert">Recompensa: +0 Dano</p>
-  </div>
-
-  <div class="target_wrapper">
-    <p class="target_name">Círculo Dourado</p>
-    <div class="targets" id="target"></div>
-    <div class="health_bar_container">
-      <div class="health_bar_wrapper">
-        <div id="health_fill"></div>
-        <div class="target_counters">0 / 0</div>
-      </div>
-    </div>
-  </div>
-</div>
     </main>
 
     <footer>

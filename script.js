@@ -635,3 +635,26 @@ ui.shopButtons.forEach((button) => {
     buyUpgrade(upgradeId);
   });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Pega todos os botões do menu e todas as telas
+  const navButtons = document.querySelectorAll('.nav_btn');
+  const screens = document.querySelectorAll('.screen');
+
+  // Para cada botão, adiciona um ouvinte de clique
+  navButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      
+      // 1. Qual é a tela alvo deste botão?
+      const targetScreenId = button.getAttribute('data-target');
+
+      // 2. Remove a classe 'active' de TODOS os botões e TODAS as telas
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      screens.forEach(screen => screen.classList.remove('active'));
+
+      // 3. Adiciona a classe 'active' no botão clicado e na tela correspondente
+      button.classList.add('active');
+      document.getElementById(targetScreenId).classList.add('active');
+    });
+  });
+});

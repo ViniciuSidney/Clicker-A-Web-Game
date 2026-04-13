@@ -14,6 +14,14 @@
   position: relative;
 }
 
+#content_canvas {
+  flex: 1; /* O jogo ocupa todo o espaço da esquerda */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Progressão */
 
 #progression_container {
