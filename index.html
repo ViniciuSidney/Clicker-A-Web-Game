@@ -3,87 +3,84 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/header-hud.css" />
-    <!-- <link rel="stylesheet" href="css/shop.css" /> -->
-    <link rel="stylesheet" href="css/play-area.css" />
-    <link rel="stylesheet" href="css/coins.css" />
-    <link rel="stylesheet" href="css/announcements.css" />
-    <link rel="stylesheet" href="css/targets.css" />
-    <link rel="stylesheet" href="css/effects.css" />
-    <link rel="stylesheet" href="css/nav.css"/>
-    
-    <title>Clicker Game v0.3.3</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Clicker Game</title>
   </head>
   <body>
-    <main>
-      <div id="game">
-        <div class="header">
-          <h1 id="game_title">Clicker Game</h1>
-          <h2 id="game_version">v0.3.3</h2>
-        </div>
+    <main id="app_root">
+      <header class="game_header">
+        <h1 id="game_title">Clicker Game</h1>
+        <h2 id="game_version">v0.3.4</h2>
+      </header>
 
-        <div class="hud">
-          <div class="hud-top">
-            <p class="counters" id="coin_c">Moedas: 0</p>
-            <p class="counters" id="damage_c">Dano por Clique: 1</p>
-          </div>
-
-          <div class="hud-bottom">
+      <section id="play_field">
+        <div id="content_canvas">
+          <div id="main_hud">
+            <div class="hud_stats">
+              <p class="stat_item" id="coin_c">💰 Moedas:<span>0</span></p>
+              <p class="stat_item" id="damage_c">⚔️ Dano:<span>1</span></p>
+            </div>
             <div class="player_xp_container">
               <div class="player_xp_fill" id="xp_fill" style="width: 50%"></div>
-              <span class="player_xp_text">Nv. 1 (50%)</span>
+              <span class="player_xp_text">XP: 5/10</span>
             </div>
           </div>
-        </div>
 
-        <div class="play_area" id="play_field">
-
-          <div id="content_canvas">
-
-
+          <div class="center_game_group">
             <div id="progression_container">
-              <div id="round_text">Rodada 1</div>
+              <div id="round_text">Rodada <span id="round_value">01</span></div>
               <div id="progression_circles"></div>
-            </div>
-
-            <div id="stage_multiplier">
-              Multiplicador de Moedas: <span id="mult_value">x1.0</span>
-            </div>
-
-            <div id="round_announcement">
-              <div id="round_title"></div>
-              <div id="round_stats_alert"></div>
-            </div>
-
-            <div id="level_announcement">
-              <h2 id="level_title">Nível Alcançado!</h2>
-              <p id="level_stats_alert">Recompensa: +0 Dano</p>
+              <div id="stage_multiplier">
+                Multiplicador de Moedas <span id="mult_value">x1.0</span>
+              </div>
             </div>
 
             <div class="target_wrapper">
               <p class="target_name">Círculo Dourado</p>
+
               <div class="targets" id="target"></div>
-              <div class="health_bar_container">
-                <div class="health_bar_wrapper">
+
+              <div class="health_section">
+                <div class="health_bar_container">
                   <div id="health_fill"></div>
-                  <div class="target_counters">0 / 0</div>
+                  <div class="target_counters">150 / 150</div>
                 </div>
               </div>
             </div>
-          </div>
-        
-          <nav id="side_nav">
-            <button class="nav_item active" data-target="screen_play" title="Arena">🎮 Arena</button>
-            <button class="nav_item" data-target="screen_shop" title="Loja">🛒 Loja</button>
-            <button class="nav_item" data-target="screen_achievements" title="Conquistas">🏆 Conquistas</button>
-          </nav>
-        </div>
-    </main>
 
-    <footer>
-      <p>&copy; 2026 - Todos os direitos reservados.</p>
-    </footer>
+          <div id="round_announcement">
+            <div id="round_title"></div>
+            <div id="round_stats_alert"></div>
+          </div>
+
+          <div id="level_announcement">
+            <h2 id="level_title">Nível Alcançado!</h2>
+            <p id="level_stats_alert">Recompensa: +0 Dano</p>
+          </div>
+          </div>
+        </div>
+
+        <nav id="side_nav">
+          <button class="nav_item active" data-target="screen_play">
+            <span class="icon">🎮</span>
+            <span class="label">Arena</span>
+          </button>
+          <button class="nav_item" data-target="screen_shop">
+            <span class="icon">🛒</span>
+            <span class="label">Loja</span>
+          </button>
+          <button class="nav_item" data-target="screen_achievements">
+            <span class="icon">🏆</span>
+            <span class="label">Extras</span>
+          </button>
+        </nav>
+      </section>
+
+      <footer class="game_footer">
+        <p>Feito por Vinícius Sidney em 2026!</p>
+      </footer>
+    </main>
 
     <script src="script.js"></script>
   </body>

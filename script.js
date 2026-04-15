@@ -159,8 +159,8 @@ const ui = {
   nameDisplay: document.querySelector('.target_name'),
   playField: document.getElementById('play_field'),
   targetWrapper: document.querySelector('.target_wrapper'),
-  coinsDisplay: document.querySelectorAll('.counters')[0],
-  damageDisplay: document.querySelectorAll('.counters')[1],
+  coinsDisplay: document.getElementById('coin_c'),
+  damageDisplay: document.getElementById('damage_c'),
   multDisplay: document.getElementById('mult_value'),
 
   xpBar: document.getElementById('xp_fill'),
@@ -198,11 +198,11 @@ function updateUI() {
   ui.healthText.innerText = `${formatNumber(Math.max(0, target.currentHealth))} / ${formatNumber(target.maxHealth)}`;
 
   // Atualiza os contadores de moedas e dano
-  ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
-  ui.damageDisplay.innerText = `Dano por Clique: ${formatNumber(currentDamage)}`;
+  ui.coinsDisplay.innerText = `💰 Moedas: ${formatNumber(player.coins)}`;
+  ui.damageDisplay.innerText = `⚔️ Dano: ${formatNumber(currentDamage)}`;
 
   // Atualiza a aparência do alvo com base no tipo atual
-  ui.targetObject.className = `objects ${currentTargetData.shape}`;
+  ui.targetObject.className = `targets ${currentTargetData.shape}`;
   ui.targetObject.style.backgroundColor = currentTargetData.color;
 
   // Atualiza o multiplicador e a rodada atual
@@ -476,7 +476,7 @@ function spawnCoin() {
   // Adiciona um evento de clique à moeda para que, quando o jogador clicar nela, ele receba as moedas correspondentes e a moeda desapareça com um efeito de pontuação flutuante
   coin.addEventListener('click', () => {
     player.coins += coinValue;
-    ui.coinsDisplay.innerText = `Moedas: ${formatNumber(player.coins)}`;
+    ui.coinsDisplay.innerText = `💰 Moedas: ${formatNumber(player.coins)}`;
 
     const floatingScore = document.createElement('div');
     floatingScore.className = 'floating_score';
@@ -526,7 +526,7 @@ function handleTargetClick(clickX, clickY) {
 
     const fieldRect = ui.playField.getBoundingClientRect();
     particle.style.left = `${clickX - fieldRect.left}px`;
-    particle.style.top = `${clickY - fieldRect.top}px`;
+    particle.style.top = `${clickY - fieldRect.top * 0.1}px`;
 
     ui.playField.appendChild(particle);
 
