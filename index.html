@@ -16,54 +16,128 @@
 
       <section id="play_field">
         <div id="content_canvas">
-          <div id="main_hud">
-            <div class="hud_stats">
-              <p class="stat_item" id="coin_c">💰 Moedas:<span>0</span></p>
-              <p class="stat_item" id="damage_c">⚔️ Dano:<span>1</span></p>
-            </div>
-            <div class="player_xp_container">
-              <div class="player_xp_fill" id="xp_fill" style="width: 50%"></div>
-              <span class="player_xp_text">XP: 5/10</span>
-            </div>
-          </div>
-
-          <div class="center_game_group">
-            <div id="progression_container">
-              <div id="round_text">Rodada <span id="round_value">01</span></div>
-              <div id="progression_circles"></div>
-              <div id="stage_multiplier">
-                Multiplicador de Moedas <span id="mult_value">x1.0</span>
+          <section id="screen_play" class="screen active">
+            <div id="main_hud">
+              <div class="hud_stats">
+                <p class="stat_item" id="coin_c">💰 Moedas:<span>0</span></p>
+                <p class="stat_item" id="strength_c">⚔️ Força:<span>1</span></p>
+              </div>
+              <div class="player_xp_container">
+                <div
+                  class="player_xp_fill"
+                  id="xp_fill"
+                  style="width: 50%"
+                ></div>
+                <span class="player_xp_text">XP: 5/10</span>
               </div>
             </div>
 
-            <div class="target_wrapper">
-              <p class="target_name">Círculo Dourado</p>
-
-              <div class="targets" id="target"></div>
-
-              <div class="health_section">
-                <div class="health_bar_container">
-                  <div id="health_fill"></div>
-                  <div class="target_counters">150 / 150</div>
+            <div class="center_game_group">
+              <div id="progression_container">
+                <div id="round_text">
+                  Rodada <span id="round_value">01</span>
+                </div>
+                <div id="progression_circles"></div>
+                <div id="stage_multiplier">
+                  Multiplicador de Moedas <span id="mult_value">x1.0</span>
                 </div>
               </div>
+
+              <div class="target_wrapper">
+                <p class="target_name">Círculo Dourado</p>
+                <div class="targets" id="target"></div>
+
+                <div class="health_section">
+                  <div class="health_bar_container">
+                    <div id="health_fill"></div>
+                    <div class="target_counters">150 / 150</div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="round_announcement">
+                <div id="round_title"></div>
+                <div id="round_stats_alert"></div>
+              </div>
+
+              <div id="level_announcement">
+                <h2 id="level_title">Nível Alcançado!</h2>
+                <p id="level_stats_alert">Recompensa: +0 Dano</p>
+              </div>
             </div>
+          </section>
 
-          <div id="round_announcement">
-            <div id="round_title"></div>
-            <div id="round_stats_alert"></div>
-          </div>
+          <section id="screen_shop" class="screen">
+            <aside class="shop_panel shop_screen_panel">
+              <div class="shop_header">
+                <h3>Loja</h3>
+                <p>Melhore seus atributos</p>
+              </div>
 
-          <div id="level_announcement">
-            <h2 id="level_title">Nível Alcançado!</h2>
-            <p id="level_stats_alert">Recompensa: +0 Dano</p>
-          </div>
-          </div>
+              <div class="shop_section">
+                <h4>Upgrades de Clique</h4>
+
+                <button class="upgrade_card" data-upgrade-id="clickBase">
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Força Bruta</span>
+                    <span class="upgrade_desc">+2 de dano por nível</span>
+                  </div>
+                  <span class="upgrade_cost">50</span>
+                </button>
+
+                <button class="upgrade_card" data-upgrade-id="clickCritChance">
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Golpe Crítico</span>
+                    <span class="upgrade_desc">+5% de chance crítica</span>
+                  </div>
+                  <span class="upgrade_cost">150</span>
+                </button>
+              </div>
+
+              <div class="shop_section">
+                <h4>Upgrades Passivos</h4>
+
+                <button class="upgrade_card" data-upgrade-id="passiveDamage">
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Impacto Passivo</span>
+                    <span class="upgrade_desc">Ativa dano automático</span>
+                  </div>
+                  <span class="upgrade_cost">100</span>
+                </button>
+
+                <button
+                  class="upgrade_card"
+                  data-upgrade-id="autoCollectChance"
+                >
+                  <div class="upgrade_info">
+                    <span class="upgrade_name">Coleta Parcial</span>
+                    <span class="upgrade_desc"
+                      >+10% de chance de coleta automática</span
+                    >
+                  </div>
+                  <span class="upgrade_cost">300</span>
+                </button>
+              </div>
+            </aside>
+          </section>
+
+          <section id="screen_achievements" class="screen">
+            <div class="placeholder_screen">
+              <h2>Conquistas</h2>
+              <p>Em desenvolvimento.</p>
+            </div>
+          </section>
+
+          <section id="screen_secrets" class="screen">
+            <div class="placeholder_screen">
+              <h2>Segredo</h2>
+              <p>Ainda bloqueado...</p>
+            </div>
+          </section>
         </div>
-
         <nav id="side_nav">
           <button class="nav_item active" data-target="screen_play">
-            <span class="icon">🎮</span>
+            <span class="icon">⚔️</span>
             <span class="label">Arena</span>
           </button>
           <button class="nav_item" data-target="screen_shop">
@@ -72,7 +146,11 @@
           </button>
           <button class="nav_item" data-target="screen_achievements">
             <span class="icon">🏆</span>
-            <span class="label">Extras</span>
+            <span class="label">Conquistas</span>
+          </button>
+          <button class="nav_item" data-target="screen_secrets">
+            <span class="icon">❓</span>
+            <span class="label">Segredo</span>
           </button>
         </nav>
       </section>

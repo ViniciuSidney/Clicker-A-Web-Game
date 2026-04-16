@@ -163,7 +163,7 @@ const ui = {
   playField: document.getElementById('play_field'),
   targetWrapper: document.querySelector('.target_wrapper'),
   coinsDisplay: document.getElementById('coin_c'),
-  damageDisplay: document.getElementById('damage_c'),
+  strengthDisplay: document.getElementById('strength_c'),
   multDisplay: document.getElementById('mult_value'),
 
   xpBar: document.getElementById('xp_fill'),
@@ -202,7 +202,7 @@ function updateUI() {
 
   // Atualiza os contadores de moedas e dano
   ui.coinsDisplay.innerText = `💰 Moedas: ${formatNumber(player.coins)}`;
-  ui.damageDisplay.innerText = `⚔️ Dano: ${formatNumber(currentDamage)}`;
+  ui.strengthDisplay.innerText = `⚔️ Força: ${formatNumber(currentDamage)}`;
 
   // Atualiza a aparência do alvo com base no tipo atual
   ui.targetObject.className = `targets ${currentTargetData.shape}`;
@@ -231,6 +231,7 @@ function updateUI() {
 
   renderShop();
 }
+
 function initializeGame() {
   const firstTarget = targetList[target.currentIndex];
 
@@ -637,23 +638,24 @@ ui.shopButtons.forEach((button) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Pega todos os botões do menu e todas as telas
-  const navButtons = document.querySelectorAll('.nav_btn');
+  const navButtons = document.querySelectorAll('.nav_item');
   const screens = document.querySelectorAll('.screen');
 
-  // Para cada botão, adiciona um ouvinte de clique
   navButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      // 1. Qual é a tela alvo deste botão?
-      const targetScreenId = button.getAttribute('data-target');
+      const targetScreenId = button.dataset.target;
+      const targetScreen = document.getElementById(targetScreenId);
 
-      // 2. Remove a classe 'active' de TODOS os botões e TODAS as telas
+      if (!targetScreen) {
+        console.warn(`[NAV] Tela não encontrada: ${targetScreenId}`);
+        return;
+      }
+
       navButtons.forEach((btn) => btn.classList.remove('active'));
       screens.forEach((screen) => screen.classList.remove('active'));
 
-      // 3. Adiciona a classe 'active' no botão clicado e na tela correspondente
       button.classList.add('active');
-      document.getElementById(targetScreenId).classList.add('active');
+      targetScreen.classList.add('active');
     });
   });
 });
