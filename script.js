@@ -19,13 +19,24 @@ const player = {
   },
 
   getDamage: function () {
-    const base = 1;
+    const base = 2;
     const upgradeBonus = this.upgrades.clickBase * 2 * this.upgrades.clickPower;
-    const levelMult = Math.pow(1.5, this.level - 1);
+    const levelMult = Math.pow(1.75, this.level - 1);
     const upgradeMult = 1 + this.upgrades.clickMult * 1;
 
     return (base + upgradeBonus) * levelMult * upgradeMult;
   },
+};
+
+// Estado do alvo atual
+const target = {
+  growthRate: 2, // 50% de aumento composto
+  currentIndex: 0,
+  round: 1,
+  baseHealth: 10,
+  maxHealth: 10,
+  currentHealth: 10,
+  isTransitioning: false,
 };
 
 // Configurações dos alvos
@@ -34,54 +45,46 @@ const targetList = [
     name: 'Círculo Dourado',
     color: 'gold',
     shape: 'shape-circle',
-    baseHealth: 10,
+    baseHealth: target.baseHealth * target.growthRate * 0.5,
     rewardMultiplier: 1,
   },
   {
     name: 'Quadrado Carmesim',
     color: 'crimson',
     shape: 'shape-square',
-    baseHealth: 25,
+    baseHealth: target.baseHealth * target.growthRate * 1.5,
     rewardMultiplier: 2,
   },
   {
     name: 'Triângulo Esmeralda',
     color: 'mediumseagreen',
     shape: 'shape-triangle',
-    baseHealth: 50,
+    baseHealth: target.baseHealth * target.growthRate * 2,
     rewardMultiplier: 3,
   },
   {
     name: 'Losango de Ametista',
     color: '#9b59b6',
     shape: 'shape-diamond',
-    baseHealth: 90,
+    baseHealth: target.baseHealth * target.growthRate * 4,
     rewardMultiplier: 4,
   },
   {
     name: 'Pentágono de Ferro',
     color: '#7f8c8d',
     shape: 'shape-pentagon',
-    baseHealth: 175,
+    baseHealth: target.baseHealth * target.growthRate * 5,
     rewardMultiplier: 5,
   },
   {
     name: 'Hexágono de Obsidiana',
     color: '#2c3e50',
     shape: 'shape-hexagon',
-    baseHealth: 350,
+    baseHealth: target.baseHealth * target.growthRate * 6,
     rewardMultiplier: 6,
   },
 ];
 
-// Estado do alvo atual
-const target = {
-  currentIndex: 0,
-  round: 1,
-  maxHealth: 10,
-  currentHealth: 10,
-  isTransitioning: false,
-};
 
 // Configurações das moedas
 const coinConfig = {
@@ -262,10 +265,8 @@ function showRoundAnnouncer(roundNum) {
   const title = document.getElementById('round_title');
   const alert = document.getElementById('round_stats_alert');
 
-  const nextBonus = 50;
-
   title.innerText = `Rodada ${roundNum} Concluída!`;
-  alert.innerText = `⚠ Mais Dificuldade: Alvos com +${nextBonus}% de Vida!`;
+  alert.innerText = `⚠ Mais Dificuldade: Alvos com ${target.growthRate}x+ Vida!`;
 
   container.classList.remove('animate-round-text');
   void container.offsetWidth;
@@ -317,8 +318,7 @@ function addXp(amount) {
 
 // Função para calcular a saúde do alvo com base na rodada atual usando um aumento composto
 function getScaledHealth(baseHealth) {
-  const growthRate = 1.5; // 50% de aumento composto
-  const multiplier = Math.pow(growthRate, target.round - 1);
+  const multiplier = Math.pow(target.growthRate, target.round - 1);
 
   return Math.floor(baseHealth * multiplier);
 }
@@ -642,15 +642,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const screens = document.querySelectorAll('.screen');
 
   // Para cada botão, adiciona um ouvinte de clique
-  navButtons.forEach(button => {
+  navButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      
       // 1. Qual é a tela alvo deste botão?
       const targetScreenId = button.getAttribute('data-target');
 
       // 2. Remove a classe 'active' de TODOS os botões e TODAS as telas
-      navButtons.forEach(btn => btn.classList.remove('active'));
-      screens.forEach(screen => screen.classList.remove('active'));
+      navButtons.forEach((btn) => btn.classList.remove('active'));
+      screens.forEach((screen) => screen.classList.remove('active'));
 
       // 3. Adiciona a classe 'active' no botão clicado e na tela correspondente
       button.classList.add('active');
