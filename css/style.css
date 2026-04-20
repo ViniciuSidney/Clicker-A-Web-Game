@@ -728,22 +728,6 @@ html {
   color: #ffd700;
 }
 
-#play_field {
-  outline: 3px solid red;
-}
-
-#content_canvas {
-  outline: 3px solid blue;
-}
-
-#side_nav {
-  outline: 3px solid yellow;
-}
-
-#screen_play {
-  outline: 5px solid lime;
-}
-
 /* ========================================
    LOJA
 ======================================== */
